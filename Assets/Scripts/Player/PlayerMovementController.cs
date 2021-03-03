@@ -1,30 +1,37 @@
 using System;
+using Mirror;
 using UnityEngine;
 
 namespace Player
 {
-    public class PlayerMovementController : MonoBehaviour
+    public class PlayerMovementController : NetworkBehaviour
     {
         // Speeds
-        [SerializeField] private float _moveSpeed      = 5f;
-        [SerializeField] private float _rollSpeed      = 2f;
-        [SerializeField] private float _heightSpeed    = 2f;
+        [Header("Speeds Settings")]
+        [SerializeField] private float _moveSpeed      = 8f;
+        [SerializeField] private float _rollSpeed      = 40f;
+        [SerializeField] private float _heightSpeed    = 8f;
         [SerializeField] private float _drag           = 2f;
+        [SerializeField] private float _dragColliding  = 100f;
         
-        [SerializeField] private float _mouseSensitivity = 5.0f;
-        
-        private float _currentSpeed;
+        // Camera
+        [SerializeField] private float _mouseSensitivity = 5f;
+        [SerializeField] private GameObject _camera;
         
         private float _rotationX, _rotationY, _rotationZ;
         
         private Rigidbody _rigidbody;
         private Vector3 _move = Vector3.zero;
-        
+
         // Inputs
         private PlayerInActions _controls;
 
         private void Start()
         {
+            if (!isLocalPlayer)
+                return;
+            
+            _camera.SetActive(true);
             _rigidbody = GetComponent<Rigidbody>();
         }
         
@@ -45,6 +52,9 @@ namespace Player
 
         private void FixedUpdate()
         {
+            if (!isLocalPlayer)
+                return;
+            
             Rotate();
             Move();
             ControlHeight();
@@ -56,7 +66,6 @@ namespace Player
             Vector2 movementInput = _controls.Player.Look.ReadValue<Vector2>();
             float rollInput = _controls.Player.Roll.ReadValue<float>();
             Vector3 euler = _rigidbody.rotation.eulerAngles;
-            
             
             movementInput.x *= _mouseSensitivity * Time.deltaTime;
             movementInput.y *= _mouseSensitivity * Time.deltaTime;
@@ -75,9 +84,9 @@ namespace Player
             // Yaw
             transform.Rotate(0f, _rotationY, 0f, Space.Self);
 
-            _rotationX = 0;
-            _rotationY = 0;
-            _rotationZ = 0;
+            _rotationX = 0f;
+            _rotationY = 0f;
+            _rotationZ = 0f;
         }
 
         private void Move()
@@ -106,12 +115,18 @@ namespace Player
 
         private void OnCollisionEnter(Collision other)
         {
-            _rigidbody.freezeRotation = true;
+            if (!isLocalPlayer)
+                return;
+            _rigidbody.angularDrag = _dragColliding;
+            //_rigidbody.freezeRotation = true;
         }
 
         private void OnCollisionExit(Collision other)
         {
-            _rigidbody.freezeRotation = false;
+            if (!isLocalPlayer)
+                return;
+            _rigidbody.angularDrag = 1f;
+            //_rigidbody.freezeRotation = false;
         }
     }
 }

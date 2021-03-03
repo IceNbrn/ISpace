@@ -12207,6 +12207,8 @@ GameObject:
   - component: {fileID: 6439957197133015475}
   - component: {fileID: 6439957197133015474}
   - component: {fileID: 6439957197133015477}
+  - component: {fileID: 6439957196747141937}
+  - component: {fileID: 6439957196747141936}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -12301,11 +12303,49 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91ba56063d8d07e45b3997f64e10f0be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
   _moveSpeed: 8
-  _rollSpeed: 20
+  _rollSpeed: 40
   _heightSpeed: 8
   _drag: 2
+  _dragColliding: 10000
   _mouseSensitivity: 8
+  _camera: {fileID: 6439957197341652731}
+--- !u!114 &6439957196747141937
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6439957197133015479}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  serverOnly: 0
+  m_AssetId: 
+  hasSpawned: 0
+--- !u!114 &6439957196747141936
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6439957197133015479}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f74aedd71d9a4f55b3ce499326d45fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  clientAuthority: 1
+  localPositionSensitivity: 0.01
+  localRotationSensitivity: 0.01
+  localScaleSensitivity: 0.01
 --- !u!1 &6439957197341652731
 GameObject:
   m_ObjectHideFlags: 0
@@ -12325,7 +12365,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6439957197341652727
 Transform:
   m_ObjectHideFlags: 0
