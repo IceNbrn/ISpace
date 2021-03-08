@@ -11,7 +11,7 @@ namespace Player
         [SerializeField] private float _moveSpeed      = 8f;
         [SerializeField] private float _rollSpeed      = 40f;
         [SerializeField] private float _heightSpeed    = 8f;
-        [SerializeField] private float _drag           = 2f;
+        //[SerializeField] private float _drag           = 2f;
         [SerializeField] private float _dragColliding  = 100f;
         
         // Camera
