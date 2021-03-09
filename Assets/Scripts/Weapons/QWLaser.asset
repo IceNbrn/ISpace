@@ -16,3 +16,4 @@ MonoBehaviour:
   FireRate: 25
   Capacity: 30
   Range: 200
+  MuzzleFlash: {fileID: 1019983355804222191, guid: 0621870afc323924386e8c7b3116797b, type: 3}

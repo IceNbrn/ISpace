@@ -9,7 +9,6 @@ namespace Weapons
         public float FireRate = 25.0f;
         public byte Capacity = 30;
         public float Range = 200.0f;
-
-        public ParticleSystem MuzzleFlash;
+        
     }
 }

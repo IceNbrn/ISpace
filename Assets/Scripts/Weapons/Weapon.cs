@@ -11,6 +11,9 @@ public class Weapon : NetworkBehaviour
 {
     [SerializeField]
     private WeaponInfo weaponInfo;
+    
+    [SerializeField]
+    public ParticleSystem muzzleFlash1, muzzleFlash2;
 
     [SerializeField] 
     private Camera fpsCamera;
@@ -33,7 +36,8 @@ public class Weapon : NetworkBehaviour
 
     private void ShootAction(InputAction.CallbackContext obj)
     {
-        //weaponInfo.MuzzleFlash.Play();
+        muzzleFlash1.Play();
+        muzzleFlash2.Play();
         
         Transform camTransform = fpsCamera.transform;
         RaycastHit hit;
