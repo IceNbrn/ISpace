@@ -45,6 +45,9 @@ namespace Player
 
         private void OnDisable()
         {
+            if (!isLocalPlayer)
+                return;
+            
             _controls?.Player.Move.Disable();
             _controls?.Player.Height.Disable();
             _controls?.Player.Roll.Disable();
