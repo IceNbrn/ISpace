@@ -19,7 +19,7 @@
                     "id": "d266e60a-f793-4436-82c3-b8c3814a48b8",
                     "expectedControlType": "Vector2",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "Hold"
                 },
                 {
                     "name": "Fire",
@@ -41,6 +41,14 @@
                     "name": "Roll",
                     "type": "Button",
                     "id": "30643c5d-2679-4aa2-992b-48d8d07060db",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Reload",
+                    "type": "Button",
+                    "id": "f9688a2d-cef9-4596-b1e2-45619618a5e0",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
@@ -398,6 +406,17 @@
                     "action": "Height",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "6d24a9d9-ccb3-47d6-85c2-b30ba2fa2efe",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Reload",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },

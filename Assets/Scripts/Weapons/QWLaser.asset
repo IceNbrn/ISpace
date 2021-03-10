@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: QWLaser
   m_EditorClassIdentifier: 
   Damage: 10
-  FireRate: 25
+  FireRate: 12
   Capacity: 30
   Range: 200
-  MuzzleFlash: {fileID: 1019983355804222191, guid: 0621870afc323924386e8c7b3116797b, type: 3}
+  CoolOffTime: 3
