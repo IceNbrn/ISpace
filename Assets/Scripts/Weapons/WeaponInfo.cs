@@ -10,7 +10,6 @@ namespace Weapons
         public byte Capacity = 30;
         public float Range = 200.0f;
         public float CoolOffTime = 3.0f;
-
-        public AnimationCurve RecoilCurve;
+        public float RecoilForce = 5.0f;
     }
 }

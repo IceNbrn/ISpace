@@ -10,6 +10,7 @@ using UnityEngine.InputSystem.Interactions;
 using Weapons;
 using Debug = UnityEngine.Debug;
 
+[RequireComponent(typeof(Rigidbody))]
 public class Weapon : NetworkBehaviour
 {
     // Weapon Stuff
@@ -17,9 +18,11 @@ public class Weapon : NetworkBehaviour
     private WeaponInfo weaponInfo;
     private int _bulletsAvailable;
     
-    // Camera
+    // Player
     [SerializeField] 
     private Camera fpsCamera;
+    
+    private Rigidbody _playerRigidbody;
     
     // Effects
     [SerializeField]
@@ -35,9 +38,6 @@ public class Weapon : NetworkBehaviour
     private bool _isShooting;
     private bool _isReloading;
     
-    // DEBUG
-    private Stopwatch _stopwatch = new Stopwatch();
-
     public void OnEnable()
     {
         PlayerInputs.PlayerControls.Player.Fire.Enable();
@@ -46,6 +46,8 @@ public class Weapon : NetworkBehaviour
 
     public void OnDisable()
     {
+        if (!isLocalPlayer)
+            return;
         PlayerInputs.PlayerControls.Player.Fire.Disable();
         PlayerInputs.PlayerControls.Player.Reload.Disable();
     }
@@ -53,6 +55,10 @@ public class Weapon : NetworkBehaviour
     // Start is called before the first frame update
     public void Start()
     {
+        if (!isLocalPlayer)
+            return;
+        _playerRigidbody = GetComponent<Rigidbody>();
+        
         PlayerInputs.PlayerControls.Player.Fire.started += context => _isShooting = true;
         PlayerInputs.PlayerControls.Player.Fire.canceled += context => _isShooting = false;
         PlayerInputs.PlayerControls.Player.Reload.performed += CooloffAction;
@@ -62,6 +68,8 @@ public class Weapon : NetworkBehaviour
 
     private void CooloffAction(InputAction.CallbackContext obj)
     {
+        if (!isLocalPlayer)
+            return;
         CoolOffWeapon();
     }
 
@@ -71,17 +79,12 @@ public class Weapon : NetworkBehaviour
         // So se don't reload more than 1 time
         if (!_isReloading)
         {
-            _stopwatch.Stop();
-            Debug.Log($"Time to empty: {_stopwatch.ElapsedMilliseconds * 0.001} seconds");
-            _stopwatch.Reset();
             StartCoroutine(CooloffCoroutine());
         }
     }
 
     private IEnumerator CooloffCoroutine()
     {
-        Debug.Log("Reloading");
-
         _isReloading = true;
         yield return new WaitForSeconds(weaponInfo.CoolOffTime);
         _bulletsAvailable = weaponInfo.Capacity;
@@ -90,6 +93,9 @@ public class Weapon : NetworkBehaviour
 
     private void Update()
     {
+        if (!isLocalPlayer)
+            return;
+        
         // Semi-Auto Mode
         if (_isShooting && weaponInfo.FireRate == 0 && _bulletsAvailable > 0)
         {
@@ -101,8 +107,6 @@ public class Weapon : NetworkBehaviour
         {
             _nextFireTime = Time.time + (1.0f / weaponInfo.FireRate);
             Shoot();
-            
-            _stopwatch.Start();
         }
         // No "bullets", time to reload
         else if (_bulletsAvailable <= 0)
@@ -114,9 +118,7 @@ public class Weapon : NetworkBehaviour
     [Client]
     private void Shoot()
     {
-        if (!networkIdentity.isLocalPlayer) 
-            return;
-
+        _bulletsAvailable--;
         ApplyRecoil();
         
         CmdOnShoot();
@@ -131,15 +133,13 @@ public class Weapon : NetworkBehaviour
 
     private void ApplyRecoil()
     {
-        float rotation = weaponInfo.RecoilCurve.Evaluate(0.2f);
-        transform.Rotate(rotation, 0f, 0f, Space.Self);
+        Vector3 force = -transform.forward * weaponInfo.RecoilForce;
+        _playerRigidbody.AddForce(force, ForceMode.Impulse);
     }
 
     [Command]
     private void CmdOnShoot()
     {
-        _bulletsAvailable--;
-        Debug.Log($"Bullets: {_bulletsAvailable}");
         RpcMuzzleFlash();
     }
 
@@ -154,7 +154,7 @@ public class Weapon : NetworkBehaviour
     private void RpcHitEffect(Vector3 position, Vector3 normal)
     {
         GameObject gameObject = (GameObject) Instantiate(hitEffect, position, Quaternion.LookRotation(normal));
-        Destroy(gameObject, 1.5f);
+        Destroy(gameObject, 1.0f);
     }
     
     // Send a muzzle flash to the other clients

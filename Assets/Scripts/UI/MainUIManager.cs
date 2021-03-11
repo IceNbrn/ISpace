@@ -1,3 +1,4 @@
+using Mirror;
 using TMPro;
 using UnityEngine;
 
@@ -5,11 +6,17 @@ namespace UI
 {
     public class MainUIManager : MonoBehaviour
     {
+        [SerializeField]
+        private NetworkManager networkManager;
+        
         [SerializeField] 
         private GameObject mainMenuPanel, serversPanel;
 
         [SerializeField] 
         private GameObject serversListPanel, directIpPanel;
+
+        [SerializeField] 
+        private TextMeshProUGUI ipAddressInput;
         
         // Start is called before the first frame update
         void Start()
@@ -17,6 +24,7 @@ namespace UI
             MainMenuPanel();
         }
 
+        // Buttons
         public void PlayBtn(GameObject toolTip = null)
         {
             DisableToolTip(toolTip);
@@ -51,7 +59,22 @@ namespace UI
             // TODO: Make sure wants to quit
             Application.Quit();
         }
+
+        public void HostBtn(GameObject toolTip = null)
+        {
+            DisableToolTip(toolTip);
+            networkManager.StartHost();
+        }
+
+        public void JoinBtn(GameObject toolTip = null)
+        {
+            DisableToolTip(toolTip); 
+            networkManager.StartClient();
+            networkManager.networkAddress = ipAddressInput.text;
+            
+        }
         
+        // Panels
         private void MainMenuPanel()
         {
             serversPanel.SetActive(false);

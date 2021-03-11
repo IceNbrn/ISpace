@@ -23,6 +23,7 @@ namespace UI
         void OnGUI()
         {
             NetworkManager networkManager = NetworkManager.singleton;
+            
             if (!networkManager.isNetworkActive)
                 return;
             
@@ -32,9 +33,11 @@ namespace UI
             
 
             if (showPing)
-                infoResult += $"Ping       : {ping} ms\n";
+                infoResult += $"[Ping]       : {ping} ms\n";
 
-            infoResult += $"Players : {networkManager.numPlayers}/{networkManager.maxConnections}";
+            int playesOnline = GameManager.Singleton.FindPlayersByTag();
+            
+            infoResult += $"[Players] : {playesOnline}/{networkManager.maxConnections}";
             
             textInfo.SetText(infoResult);
         }
