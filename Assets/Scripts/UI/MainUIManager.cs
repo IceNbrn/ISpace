@@ -7,6 +7,9 @@ namespace UI
     {
         [SerializeField] 
         private GameObject mainMenuPanel, serversPanel;
+
+        [SerializeField] 
+        private GameObject serversListPanel, directIpPanel;
         
         // Start is called before the first frame update
         void Start()
@@ -16,22 +19,33 @@ namespace UI
 
         public void PlayBtn(GameObject toolTip = null)
         {
-            if(toolTip != null)
-                DisableToolTip(toolTip);
+            DisableToolTip(toolTip);
             ServersPanel();
         }
 
-        public void OptionsBtn(GameObject toolTip)
+        public void OptionsBtn(GameObject toolTip = null)
         {
             DisableToolTip(toolTip);
         }
 
-        public void BackBtn(GameObject toolTip)
+        public void BackBtn(GameObject toolTip = null)
         {
             DisableToolTip(toolTip);
             MainMenuPanel();
         }
 
+        public void ServerListBtn(GameObject toolTip = null)
+        {
+            DisableToolTip(toolTip);
+            ServerListPanel();
+        }
+        
+        public void DirectIpBtn(GameObject toolTip = null)
+        {
+            DisableToolTip(toolTip);
+            DirectPanel();
+        }
+        
         public void QuitBtn()
         {
             // TODO: Make sure wants to quit
@@ -50,9 +64,21 @@ namespace UI
             serversPanel.SetActive(true);
         }
 
+        private void DirectPanel()
+        {
+            serversListPanel.SetActive(false);
+            directIpPanel.SetActive(true);
+        }
+        
+        private void ServerListPanel()
+        {
+            directIpPanel.SetActive(false);
+            serversListPanel.SetActive(true);
+        }
+
         private void DisableToolTip(GameObject toolTip)
         {
-            if(toolTip.activeSelf)
+            if(toolTip != null && toolTip.activeSelf)
                 toolTip.SetActive(false);
         }
     }

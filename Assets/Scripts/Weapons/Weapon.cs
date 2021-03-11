@@ -12,20 +12,22 @@ using Debug = UnityEngine.Debug;
 
 public class Weapon : NetworkBehaviour
 {
+    // Weapon Stuff
     [SerializeField]
     private WeaponInfo weaponInfo;
-
     private int _bulletsAvailable;
     
-    
+    // Camera
     [SerializeField] 
     private Camera fpsCamera;
     
+    // Effects
     [SerializeField]
     private ParticleSystem muzzleFlash1, muzzleFlash2;
     [SerializeField] 
     private GameObject hitEffect;
 
+    // Network
     [SerializeField]
     private NetworkIdentity networkIdentity;
 
@@ -65,6 +67,8 @@ public class Weapon : NetworkBehaviour
 
     private void CoolOffWeapon()
     {
+        // Make sure reloading is not happening already
+        // So se don't reload more than 1 time
         if (!_isReloading)
         {
             _stopwatch.Stop();
@@ -72,7 +76,6 @@ public class Weapon : NetworkBehaviour
             _stopwatch.Reset();
             StartCoroutine(CooloffCoroutine());
         }
-            
     }
 
     private IEnumerator CooloffCoroutine()
@@ -87,11 +90,13 @@ public class Weapon : NetworkBehaviour
 
     private void Update()
     {
+        // Semi-Auto Mode
         if (_isShooting && weaponInfo.FireRate == 0 && _bulletsAvailable > 0)
         {
             Shoot();
             _isShooting = false;
         }
+        // Full-Auto Mode
         else if (_isShooting && Time.time >= _nextFireTime && _bulletsAvailable > 0)
         {
             _nextFireTime = Time.time + (1.0f / weaponInfo.FireRate);
@@ -99,6 +104,7 @@ public class Weapon : NetworkBehaviour
             
             _stopwatch.Start();
         }
+        // No "bullets", time to reload
         else if (_bulletsAvailable <= 0)
         {
             CoolOffWeapon();
@@ -110,6 +116,8 @@ public class Weapon : NetworkBehaviour
     {
         if (!networkIdentity.isLocalPlayer) 
             return;
+
+        ApplyRecoil();
         
         CmdOnShoot();
         
@@ -117,23 +125,14 @@ public class Weapon : NetworkBehaviour
         RaycastHit hit;
         if (Physics.Raycast(camTransform.position, camTransform.forward, out hit, weaponInfo.Range))
         {
-            //Debug.Log($"HIT: {hit.transform.name}");
-
             CmdOnHit(hit.point, hit.normal);
         }
     }
 
-    [Command]
-    private void CmdOnHit(Vector3 position, Vector3 normal)
+    private void ApplyRecoil()
     {
-        RpcHitEffect(position, normal);
-    }
-
-    [ClientRpc]
-    private void RpcHitEffect(Vector3 position, Vector3 normal)
-    {
-        GameObject gameObject = (GameObject) Instantiate(hitEffect, position, Quaternion.LookRotation(normal));
-        Destroy(gameObject, 1.5f);
+        float rotation = weaponInfo.RecoilCurve.Evaluate(0.2f);
+        transform.Rotate(rotation, 0f, 0f, Space.Self);
     }
 
     [Command]
@@ -144,6 +143,21 @@ public class Weapon : NetworkBehaviour
         RpcMuzzleFlash();
     }
 
+    [Command]
+    private void CmdOnHit(Vector3 position, Vector3 normal)
+    {
+        RpcHitEffect(position, normal);
+    }
+
+    // Send a hit effect to the other clients
+    [ClientRpc]
+    private void RpcHitEffect(Vector3 position, Vector3 normal)
+    {
+        GameObject gameObject = (GameObject) Instantiate(hitEffect, position, Quaternion.LookRotation(normal));
+        Destroy(gameObject, 1.5f);
+    }
+    
+    // Send a muzzle flash to the other clients
     [ClientRpc]
     private void RpcMuzzleFlash()
     {
