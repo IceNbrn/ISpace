@@ -1,18 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class ButtonHover : MonoBehaviour
+public class ButtonHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private GameObject toolTip;
+    
+    public void OnPointerEnter(PointerEventData eventData)
     {
-        
+        Debug.Log("ToolTipActive");
+        toolTip.SetActive(true);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OnPointerExit(PointerEventData eventData)
     {
-        
+        toolTip.SetActive(false);
     }
+    
 }

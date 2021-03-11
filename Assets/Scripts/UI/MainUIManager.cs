@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 namespace UI
@@ -13,14 +14,22 @@ namespace UI
             MainMenuPanel();
         }
 
-        public void PlayBtn()
+        public void PlayBtn(GameObject toolTip = null)
         {
+            if(toolTip != null)
+                DisableToolTip(toolTip);
             ServersPanel();
         }
 
-        public void OptionsBtn()
+        public void OptionsBtn(GameObject toolTip)
         {
-            
+            DisableToolTip(toolTip);
+        }
+
+        public void BackBtn(GameObject toolTip)
+        {
+            DisableToolTip(toolTip);
+            MainMenuPanel();
         }
 
         public void QuitBtn()
@@ -39,6 +48,12 @@ namespace UI
         {
             mainMenuPanel.SetActive(false);
             serversPanel.SetActive(true);
+        }
+
+        private void DisableToolTip(GameObject toolTip)
+        {
+            if(toolTip.activeSelf)
+                toolTip.SetActive(false);
         }
     }
 }
