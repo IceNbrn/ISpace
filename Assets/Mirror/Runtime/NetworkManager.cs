@@ -1412,6 +1412,7 @@ namespace Mirror
                 if (autoCreatePlayer)
                 {
                     ClientScene.AddPlayer(conn);
+                    
                 }
             }
         }

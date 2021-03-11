@@ -205,7 +205,7 @@ MonoBehaviour:
   authenticator: {fileID: 0}
   playerPrefab: {fileID: 6749501898610084980, guid: 09bbdf4265f2f1e468368a6f30c004cf, type: 3}
   autoCreatePlayer: 1
-  playerSpawnMethod: 0
+  playerSpawnMethod: 1
   spawnPrefabs: []
 --- !u!4 &2392733
 Transform:
@@ -6100,7 +6100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cb09638e4ea4c940bf4305eb0e210dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  networkManager: {fileID: 0}
+  networkManager: {fileID: 2392732}
   mainMenuPanel: {fileID: 292889195}
   serversPanel: {fileID: 1360886158}
   serversListPanel: {fileID: 1612873337}

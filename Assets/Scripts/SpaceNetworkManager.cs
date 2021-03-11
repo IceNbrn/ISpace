@@ -2,18 +2,24 @@ using System;
 using Mirror;
 using UnityEngine;
 
-public class SpaceNetworkManager : MonoBehaviour
+public class SpaceNetworkManager : NetworkBehaviour
 {
-    private NetworkManager _networkManager;
-    private void Start()
+    public void Start()
     {
-        _networkManager = GetComponent<NetworkManager>();
         
-        
+        //ClientScene.onLocalPlayerChanged += ClientSceneOnonLocalPlayerChanged;
     }
 
-    public void OnClientConnect(NetworkConnection conn)
+    public override void OnStartClient()
     {
-        Debug.Log("Client connected");
+        Debug.Log("StartClient");
+        GameManager.Singleton.UpdatePlayersCount();
+        base.OnStartClient();
+    }
+
+    private void ClientSceneOnonLocalPlayerChanged(NetworkIdentity oldplayer, NetworkIdentity newplayer)
+    {
+        Debug.Log("LocalPlayerChanged");
+        GameManager.Singleton.UpdatePlayersCount();
     }
 }

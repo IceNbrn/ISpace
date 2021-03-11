@@ -35,14 +35,14 @@ public class GameManager : MonoBehaviour
         return true;
     }
 
-    private void UpdatePlayersCount()
+    public void UpdatePlayersCount()
     {
-        PlayersOnline++;
+        PlayersOnline = FindPlayersByTag("Player");
     }
     
-    public int FindPlayersByTag()
+    public int FindPlayersByTag(string tag)
     {
-        int players = GameObject.FindGameObjectsWithTag("Player").Length;
+        int players = GameObject.FindGameObjectsWithTag(tag).Length;
         return players;
     }
     

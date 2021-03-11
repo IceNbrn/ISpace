@@ -35,7 +35,7 @@ namespace UI
             if (showPing)
                 infoResult += $"[Ping]       : {ping} ms\n";
 
-            int playesOnline = GameManager.Singleton.FindPlayersByTag();
+            int playesOnline = GameManager.PlayersOnline;
             
             infoResult += $"[Players] : {playesOnline}/{networkManager.maxConnections}";
             
