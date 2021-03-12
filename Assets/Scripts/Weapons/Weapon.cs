@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Mirror;
 using Player;
 using UnityEngine;
@@ -16,12 +17,17 @@ public class Weapon : NetworkBehaviour
     // Weapon Stuff
     [SerializeField]
     private WeaponInfo weaponInfo;
-    private int _bulletsAvailable;
+    [SerializeField] 
+    private WeaponUI weaponUI;
     
+    private byte _bulletsAvailable;
+    private byte _magazineAvailable;
+
     // Player
     [SerializeField] 
+    private string playerUIName = "PlayerHUD";
+    [SerializeField] 
     private Camera fpsCamera;
-    
     private Rigidbody _playerRigidbody;
     
     // Effects
@@ -64,12 +70,24 @@ public class Weapon : NetworkBehaviour
         PlayerInputs.PlayerControls.Player.Reload.performed += CooloffAction;
 
         _bulletsAvailable = weaponInfo.Capacity;
+        _magazineAvailable = weaponInfo.MagazineCapacity;
+
+        LoadWeaponUI();
+        weaponUI.UpdateAmmo(_magazineAvailable, _bulletsAvailable);
+    }
+
+    private void LoadWeaponUI()
+    {
+        if (weaponUI == null)
+        {
+            GameObject playerHud = GameObject.Find(playerUIName);
+            weaponUI = playerHud.GetComponentInChildren<WeaponUI>();
+        }
     }
 
     private void CooloffAction(InputAction.CallbackContext obj)
     {
-        if (!isLocalPlayer)
-            return;
+        Debug.Log("Reload");
         CoolOffWeapon();
     }
 
@@ -79,6 +97,7 @@ public class Weapon : NetworkBehaviour
         // So se don't reload more than 1 time
         if (!_isReloading)
         {
+            Debug.Log("Reloading...");
             StartCoroutine(CooloffCoroutine());
         }
     }
@@ -87,7 +106,14 @@ public class Weapon : NetworkBehaviour
     {
         _isReloading = true;
         yield return new WaitForSeconds(weaponInfo.CoolOffTime);
-        _bulletsAvailable = weaponInfo.Capacity;
+
+        byte weaponMagazine = weaponInfo.MagazineCapacity;
+        byte needBullets = (byte)(weaponMagazine - _magazineAvailable);
+
+        _magazineAvailable += needBullets;
+        _bulletsAvailable -= needBullets;
+        
+        weaponUI.UpdateAmmo(_magazineAvailable, _bulletsAvailable);
         _isReloading = false;
     }
 
@@ -95,21 +121,25 @@ public class Weapon : NetworkBehaviour
     {
         if (!isLocalPlayer)
             return;
-        
+
+        if (_isReloading)
+        {
+            return;
+        }
         // Semi-Auto Mode
-        if (_isShooting && weaponInfo.FireRate == 0 && _bulletsAvailable > 0)
+        else if (_isShooting && weaponInfo.FireRate == 0 && _magazineAvailable > 0)
         {
             Shoot();
             _isShooting = false;
         }
         // Full-Auto Mode
-        else if (_isShooting && Time.time >= _nextFireTime && _bulletsAvailable > 0)
+        else if (_isShooting && Time.time >= _nextFireTime && _magazineAvailable > 0)
         {
             _nextFireTime = Time.time + (1.0f / weaponInfo.FireRate);
             Shoot();
         }
         // No "bullets", time to reload
-        else if (_bulletsAvailable <= 0)
+        else if (_magazineAvailable <= 0 && _bulletsAvailable > 0)
         {
             CoolOffWeapon();
         }
@@ -118,9 +148,8 @@ public class Weapon : NetworkBehaviour
     [Client]
     private void Shoot()
     {
-        _bulletsAvailable--;
+        _magazineAvailable--;
         ApplyRecoil();
-        
         CmdOnShoot();
         
         Transform camTransform = fpsCamera.transform;
@@ -129,6 +158,7 @@ public class Weapon : NetworkBehaviour
         {
             CmdOnHit(hit.point, hit.normal);
         }
+        weaponUI.UpdateAmmo(_magazineAvailable, _bulletsAvailable);
     }
 
     private void ApplyRecoil()
