@@ -85,38 +85,6 @@ public class Weapon : NetworkBehaviour
         }
     }
 
-    private void CooloffAction(InputAction.CallbackContext obj)
-    {
-        Debug.Log("Reload");
-        CoolOffWeapon();
-    }
-
-    private void CoolOffWeapon()
-    {
-        // Make sure reloading is not happening already
-        // So se don't reload more than 1 time
-        if (!_isReloading)
-        {
-            Debug.Log("Reloading...");
-            StartCoroutine(CooloffCoroutine());
-        }
-    }
-
-    private IEnumerator CooloffCoroutine()
-    {
-        _isReloading = true;
-        yield return new WaitForSeconds(weaponInfo.CoolOffTime);
-
-        byte weaponMagazine = weaponInfo.MagazineCapacity;
-        byte needBullets = (byte)(weaponMagazine - _magazineAvailable);
-
-        _magazineAvailable += needBullets;
-        _bulletsAvailable -= needBullets;
-        
-        weaponUI.UpdateAmmo(_magazineAvailable, _bulletsAvailable);
-        _isReloading = false;
-    }
-
     private void Update()
     {
         if (!isLocalPlayer)
@@ -145,6 +113,41 @@ public class Weapon : NetworkBehaviour
         }
     }
 
+    private void CooloffAction(InputAction.CallbackContext obj)
+    {
+        if (_bulletsAvailable > 0)
+        {
+            Debug.Log("Reload");
+            CoolOffWeapon();
+        }
+    }
+
+    private void CoolOffWeapon()
+    {
+        // Make sure reloading is not happening already
+        // So se don't reload more than 1 time
+        if (!_isReloading)
+        {
+            Debug.Log("Reloading...");
+            StartCoroutine(CooloffCoroutine());
+        }
+    }
+
+    private IEnumerator CooloffCoroutine()
+    {
+        _isReloading = true;
+        yield return new WaitForSeconds(weaponInfo.CoolOffTime);
+
+        byte weaponMagazine = weaponInfo.MagazineCapacity;
+        byte needBullets = (byte)(weaponMagazine - _magazineAvailable);
+
+        _magazineAvailable += needBullets;
+        _bulletsAvailable -= needBullets;
+        
+        weaponUI.UpdateAmmo(_magazineAvailable, _bulletsAvailable);
+        _isReloading = false;
+    }
+    
     [Client]
     private void Shoot()
     {
