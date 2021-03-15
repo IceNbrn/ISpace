@@ -5,7 +5,7 @@ namespace Weapons
     [CreateAssetMenu(fileName = "WeaponInfo", menuName = "Weapons/Weapon")]
     public class WeaponInfo : ScriptableObject
     {
-        public float Damage = 10.0f;
+        public int Damage = 10;
         public float FireRate = 25.0f;
         public byte Capacity = 120;
         public byte MagazineCapacity = 30;

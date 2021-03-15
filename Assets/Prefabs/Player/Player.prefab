@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 636407245775234586}
   m_Layer: 0
   m_Name: HeadModel
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2820,7 +2820,7 @@ GameObject:
   - component: {fileID: 6177770382655095691}
   m_Layer: 0
   m_Name: Weapon
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2857,7 +2857,7 @@ GameObject:
   - component: {fileID: 6749501897426339706}
   m_Layer: 0
   m_Name: BodyModel
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10886,6 +10886,7 @@ GameObject:
   - component: {fileID: 6635274318658201867}
   - component: {fileID: 6749501898610084982}
   - component: {fileID: 6458375402634000901}
+  - component: {fileID: 7159174417628919561}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -11057,12 +11058,30 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   weaponInfo: {fileID: 11400000, guid: 08dc5feee5d98ab4887a0bd15e14e930, type: 2}
-  weaponUI: {fileID: 0}
+  playerUIName: PlayerHUD
   fpsCamera: {fileID: 6749501898902672181}
   muzzleFlash1: {fileID: 2352643973913824357}
   muzzleFlash2: {fileID: 3234919887162479756}
   hitEffect: {fileID: 8637274477545704352, guid: b401f08b707e6164da4449d7c55d7959, type: 3}
-  networkIdentity: {fileID: 6749501897217578738}
+--- !u!114 &7159174417628919561
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6749501898610084980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75cf46c33d4978d4aa02d5b382cbeff7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  health: 100
+  canRespawn: 1
+  timeToRespawn: 3
+  bodyModel: {fileID: 6749501897426339704}
+  weaponModel: {fileID: 6368946840222464673}
 --- !u!1 &6749501898902672184
 GameObject:
   m_ObjectHideFlags: 0
@@ -11082,7 +11101,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6749501898902672180
 Transform:
   m_ObjectHideFlags: 0
@@ -11211,7 +11230,7 @@ GameObject:
   - component: {fileID: 6187452683162055156}
   m_Layer: 0
   m_Name: WeaponModel
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -14655,11 +14674,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1024414165164409417, guid: 0621870afc323924386e8c7b3116797b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.5143
+      value: -0.4406
       objectReference: {fileID: 0}
     - target: {fileID: 1024414165164409417, guid: 0621870afc323924386e8c7b3116797b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.297
+      value: -0.225
       objectReference: {fileID: 0}
     - target: {fileID: 1024414165164409417, guid: 0621870afc323924386e8c7b3116797b, type: 3}
       propertyPath: m_LocalPosition.z
@@ -14697,9 +14716,21 @@ PrefabInstance:
       propertyPath: m_Range
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1487710998398606500, guid: 0621870afc323924386e8c7b3116797b, type: 3}
+      propertyPath: m_Intensity
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3465641185752695150, guid: 0621870afc323924386e8c7b3116797b, type: 3}
       propertyPath: m_Name
       value: MuzzleFlash_1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3465641185752695150, guid: 0621870afc323924386e8c7b3116797b, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 5479168056345169933, guid: 0621870afc323924386e8c7b3116797b, type: 3}
+      propertyPath: m_TagString
+      value: Player
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0621870afc323924386e8c7b3116797b, type: 3}
@@ -14726,11 +14757,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1024414165164409417, guid: 0621870afc323924386e8c7b3116797b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.478
+      value: 0.4143
       objectReference: {fileID: 0}
     - target: {fileID: 1024414165164409417, guid: 0621870afc323924386e8c7b3116797b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.297
+      value: -0.225
       objectReference: {fileID: 0}
     - target: {fileID: 1024414165164409417, guid: 0621870afc323924386e8c7b3116797b, type: 3}
       propertyPath: m_LocalPosition.z
@@ -14764,9 +14795,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1487710998398606500, guid: 0621870afc323924386e8c7b3116797b, type: 3}
+      propertyPath: m_Intensity
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3465641185752695150, guid: 0621870afc323924386e8c7b3116797b, type: 3}
       propertyPath: m_Name
       value: MuzzleFlash
+      objectReference: {fileID: 0}
+    - target: {fileID: 3465641185752695150, guid: 0621870afc323924386e8c7b3116797b, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 5479168056345169933, guid: 0621870afc323924386e8c7b3116797b, type: 3}
+      propertyPath: m_TagString
+      value: Player
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0621870afc323924386e8c7b3116797b, type: 3}
