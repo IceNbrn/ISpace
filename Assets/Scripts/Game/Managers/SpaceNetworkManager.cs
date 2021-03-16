@@ -2,24 +2,37 @@ using System;
 using Mirror;
 using UnityEngine;
 
-public class SpaceNetworkManager : NetworkBehaviour
+public class SpaceNetworkManager : NetworkManager
 {
-    public void Start()
+    public override void OnStartServer()
     {
-        
-        //ClientScene.onLocalPlayerChanged += ClientSceneOnonLocalPlayerChanged;
+        base.OnStartServer();
+        Debug.Log("StartServer");
     }
-
+    
+    public override void OnStopServer()
+    {
+        base.OnStopServer();
+        Debug.Log("StopServer");
+    }
+    
     public override void OnStartClient()
     {
+        base.OnStartClient();
         Debug.Log("StartClient");
         GameManager.Singleton.UpdatePlayersCount();
-        base.OnStartClient();
+    }
+    
+    public override void OnStopClient()
+    {
+        base.OnStopClient();
+        Debug.Log("StopServer");
+    }
+    
+    public override void OnServerAddPlayer(NetworkConnection conn)
+    {
+        base.OnServerAddPlayer(conn);
+        Debug.Log($"Player {conn.identity.netId} added!");
     }
 
-    private void ClientSceneOnonLocalPlayerChanged(NetworkIdentity oldplayer, NetworkIdentity newplayer)
-    {
-        Debug.Log("LocalPlayerChanged");
-        GameManager.Singleton.UpdatePlayersCount();
-    }
 }

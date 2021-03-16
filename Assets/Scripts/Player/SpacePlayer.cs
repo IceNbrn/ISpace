@@ -36,6 +36,8 @@ namespace Player
         // ---------------- Systems ---------------- 
         [Header("Systems")]
         [SerializeField] private Weapon weapon;
+        
+        [SerializeField] private BoxCollider collider;
 
         // ---------------- Visuals ---------------- 
         [Header("Visuals")] 

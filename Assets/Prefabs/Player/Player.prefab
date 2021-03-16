@@ -11080,6 +11080,8 @@ MonoBehaviour:
   health: 100
   canRespawn: 1
   timeToRespawn: 3
+  weapon: {fileID: 0}
+  collider: {fileID: 0}
   bodyModel: {fileID: 6749501897426339704}
   weaponModel: {fileID: 6368946840222464673}
 --- !u!1 &6749501898902672184
