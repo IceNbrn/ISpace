@@ -12114,7 +12114,7 @@ MonoBehaviour:
   _rollSpeed: 40
   _heightSpeed: 8
   _dragColliding: 10000
-  _mouseSensitivity: 13
+  _mouseSensitivity: 0.034
   _camera: {fileID: 6749501898902672184}
 --- !u!114 &6458375402634000901
 MonoBehaviour:

@@ -2464,7 +2464,7 @@ MonoBehaviour:
   m_text: Servers List
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a715d0fec3b32eb4495b2a8474546cf7, type: 2}
-  m_sharedMaterial: {fileID: -3565638699011480923, guid: ac72596c80d56424eb8c2c66e570ab56, type: 2}
+  m_sharedMaterial: {fileID: -3833029450368177358, guid: a715d0fec3b32eb4495b2a8474546cf7, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3339,7 +3339,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1144139133}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
@@ -3355,7 +3355,7 @@ MonoBehaviour:
   m_text: IP Address
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a715d0fec3b32eb4495b2a8474546cf7, type: 2}
-  m_sharedMaterial: {fileID: -3565638699011480923, guid: ac72596c80d56424eb8c2c66e570ab56, type: 2}
+  m_sharedMaterial: {fileID: -3833029450368177358, guid: a715d0fec3b32eb4495b2a8474546cf7, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3966,7 +3966,7 @@ MonoBehaviour:
   m_text: ' TMW Private Server | FFA  [1/10]'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a715d0fec3b32eb4495b2a8474546cf7, type: 2}
-  m_sharedMaterial: {fileID: -3565638699011480923, guid: ac72596c80d56424eb8c2c66e570ab56, type: 2}
+  m_sharedMaterial: {fileID: -3833029450368177358, guid: a715d0fec3b32eb4495b2a8474546cf7, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4445,12 +4445,12 @@ MonoBehaviour:
   m_CaretColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_CustomCaretColor: 0
   m_SelectionColor: {r: 0.65882355, g: 0.80784315, b: 1, a: 0.7529412}
-  m_Text: 
+  m_Text: 192.168.1.195
   m_CaretBlinkRate: 0.85
   m_CaretWidth: 1
   m_ReadOnly: 0
   m_RichText: 1
-  m_GlobalFontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_GlobalFontAsset: {fileID: 11400000, guid: a715d0fec3b32eb4495b2a8474546cf7, type: 2}
   m_OnFocusSelectAll: 1
   m_ResetOnDeActivation: 1
   m_RestoreOriginalTextOnEscape: 1
@@ -4648,7 +4648,7 @@ MonoBehaviour:
   m_text: Direct Ip
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a715d0fec3b32eb4495b2a8474546cf7, type: 2}
-  m_sharedMaterial: {fileID: -3565638699011480923, guid: ac72596c80d56424eb8c2c66e570ab56, type: 2}
+  m_sharedMaterial: {fileID: -3833029450368177358, guid: a715d0fec3b32eb4495b2a8474546cf7, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -5891,10 +5891,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u200B"
+  m_text: "192.168.1.195\u200B"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a715d0fec3b32eb4495b2a8474546cf7, type: 2}
-  m_sharedMaterial: {fileID: -3565638699011480923, guid: ac72596c80d56424eb8c2c66e570ab56, type: 2}
+  m_sharedMaterial: {fileID: -3833029450368177358, guid: a715d0fec3b32eb4495b2a8474546cf7, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -6018,7 +6018,7 @@ MonoBehaviour:
   serversPanel: {fileID: 1360886158}
   serversListPanel: {fileID: 1612873337}
   directIpPanel: {fileID: 480146169}
-  ipAddressInput: {fileID: 2098026465}
+  ipAddressInput: {fileID: 1478419782}
 --- !u!1001 &4483603525470206573
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6069,6 +6069,10 @@ PrefabInstance:
     - target: {fileID: 4483603525540172064, guid: 7e37b86776014164a961abb2006b7b33, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4483603525540172065, guid: 7e37b86776014164a961abb2006b7b33, type: 3}
+      propertyPath: networkAddress
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 4483603525540172069, guid: 7e37b86776014164a961abb2006b7b33, type: 3}
       propertyPath: m_Name

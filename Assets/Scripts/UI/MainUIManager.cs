@@ -1,3 +1,4 @@
+using System.Collections;
 using Mirror;
 using TMPro;
 using UnityEngine;
@@ -7,7 +8,7 @@ namespace UI
     public class MainUIManager : MonoBehaviour
     {
         [SerializeField]
-        private NetworkManager networkManager;
+        private SpaceNetworkManager networkManager;
         
         [SerializeField] 
         private GameObject mainMenuPanel, serversPanel;
@@ -15,8 +16,7 @@ namespace UI
         [SerializeField] 
         private GameObject serversListPanel, directIpPanel;
 
-        [SerializeField] 
-        private TextMeshProUGUI ipAddressInput;
+        [SerializeField] private TMP_InputField ipAddressInput;
         
         // Start is called before the first frame update
         void Start()
@@ -69,12 +69,16 @@ namespace UI
         public void JoinBtn(GameObject toolTip = null)
         {
             DisableToolTip(toolTip);
+
+            string ip = ipAddressInput.text;
+            //networkManager.networkAddress = "192.168.1.195";
+            networkManager.networkAddress = ip;
+            //networkManager.networkAddress = ipAddressInput.text;
             
             networkManager.StartClient();
-            networkManager.networkAddress = ipAddressInput.text;
-            
         }
         
+
         // Panels
         private void MainMenuPanel()
         {

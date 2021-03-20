@@ -70,8 +70,10 @@ namespace Player
             float rollInput = _controls.Player.Roll.ReadValue<float>();
             Vector3 euler = _rigidbody.rotation.eulerAngles;
             
-            movementInput.x *= _mouseSensitivity * Time.deltaTime;
-            movementInput.y *= _mouseSensitivity * Time.deltaTime;
+            
+            
+            movementInput.x *= _mouseSensitivity;
+            movementInput.y *= _mouseSensitivity;
             rollInput *= _rollSpeed * Time.deltaTime;
 
             _rotationX -= movementInput.y;
