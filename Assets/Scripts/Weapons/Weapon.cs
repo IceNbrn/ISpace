@@ -14,7 +14,8 @@ namespace Weapons
         [SerializeField]
         private WeaponInfo weaponInfo;
     
-        private WeaponUI _weaponUI;
+        [SerializeField]
+        private WeaponUI weaponUI;
     
         private byte _bulletsAvailable;
         private byte _magazineAvailable;
@@ -64,16 +65,16 @@ namespace Weapons
             _bulletsAvailable = weaponInfo.Capacity;
             _magazineAvailable = weaponInfo.MagazineCapacity;
 
-            Load_weaponUI();
-            _weaponUI.UpdateAmmo(_magazineAvailable, _bulletsAvailable);
+            //LoadWeaponUI();
+            weaponUI.UpdateAmmo(_magazineAvailable, _bulletsAvailable);
         }
 
-        private void Load_weaponUI()
+        private void LoadWeaponUI()
         {
-            if (_weaponUI == null)
+            if (weaponUI == null)
             {
                 GameObject playerHud = GameObject.Find(playerUIName);
-                _weaponUI = playerHud.GetComponentInChildren<WeaponUI>();
+                weaponUI = playerHud.GetComponentInChildren<WeaponUI>();
             }
         }
 
@@ -132,7 +133,7 @@ namespace Weapons
             _magazineAvailable += needBullets;
             _bulletsAvailable -= needBullets;
         
-            _weaponUI.UpdateAmmo(_magazineAvailable, _bulletsAvailable);
+            weaponUI.UpdateAmmo(_magazineAvailable, _bulletsAvailable);
             _isReloading = false;
         }
     
@@ -153,7 +154,7 @@ namespace Weapons
                 }
                 CmdOnHit(hit.point, hit.normal);
             }
-            _weaponUI.UpdateAmmo(_magazineAvailable, _bulletsAvailable);
+            weaponUI.UpdateAmmo(_magazineAvailable, _bulletsAvailable);
         }
 
         private void ApplyRecoil()
@@ -180,7 +181,11 @@ namespace Weapons
             Debug.Log($"{playerId} has been shot");
 
             SpacePlayer player = GameManager.GetPlayer(playerId);
-            player.RpcTakeDamage(damage, fromPlayer);
+            if (damage >= 0.0f && damage <= weaponInfo.Damage)
+            {
+                player.RpcTakeDamage(damage, fromPlayer);
+                
+            }
         }
 
         // Send a hit effect to the other clients

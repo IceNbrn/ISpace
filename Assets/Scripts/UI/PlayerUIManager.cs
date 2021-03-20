@@ -24,7 +24,7 @@ namespace UI
         {
             NetworkManager networkManager = NetworkManager.singleton;
             
-            if (!networkManager.isNetworkActive)
+            if (networkManager != null && !networkManager.isNetworkActive)
                 return;
             
             string infoResult = String.Empty;
