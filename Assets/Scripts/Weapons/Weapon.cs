@@ -17,8 +17,8 @@ namespace Weapons
         [SerializeField]
         private WeaponUI weaponUI;
     
-        private byte _bulletsAvailable;
-        private byte _magazineAvailable;
+        private int _bulletsAvailable;
+        private int _magazineAvailable;
 
         // Player
         [SerializeField] 
@@ -127,8 +127,8 @@ namespace Weapons
             _isReloading = true;
             yield return new WaitForSeconds(weaponInfo.CoolOffTime);
 
-            byte weaponMagazine = weaponInfo.MagazineCapacity;
-            byte needBullets = (byte)(weaponMagazine - _magazineAvailable);
+            int weaponMagazine = weaponInfo.MagazineCapacity;
+            int needBullets = weaponMagazine - _magazineAvailable;
 
             _magazineAvailable += needBullets;
             _bulletsAvailable -= needBullets;

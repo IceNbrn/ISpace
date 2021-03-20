@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Damage: 10
   FireRate: 12
-  Capacity: 120
+  Capacity: 2400
   MagazineCapacity: 30
   Range: 200
   CoolOffTime: 3

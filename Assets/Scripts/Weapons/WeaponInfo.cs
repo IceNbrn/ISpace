@@ -7,8 +7,8 @@ namespace Weapons
     {
         public int Damage = 10;
         public float FireRate = 25.0f;
-        public byte Capacity = 120;
-        public byte MagazineCapacity = 30;
+        public int Capacity = 120;
+        public int MagazineCapacity = 30;
         public float Range = 200.0f;
         public float CoolOffTime = 3.0f;
         public float RecoilForce = 5.0f;

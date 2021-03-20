@@ -15,7 +15,7 @@ namespace Player
         [SerializeField] private float _dragColliding  = 100f;
         
         // Camera
-        [SerializeField] private float _mouseSensitivity = 5f;
+        [SerializeField] private float _mouseSensitivity = 13f;
         [SerializeField] private GameObject _camera;
         
         private float _rotationX, _rotationY, _rotationZ;

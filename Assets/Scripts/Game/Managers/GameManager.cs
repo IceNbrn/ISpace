@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
         if (!InitializeSingleton()) 
             return;
         
-        Application.targetFrameRate = -1;
+        QualitySettings.vSyncCount = 0;
     }
 
     private bool InitializeSingleton()
