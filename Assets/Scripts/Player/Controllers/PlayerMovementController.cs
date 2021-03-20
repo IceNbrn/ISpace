@@ -53,7 +53,7 @@ namespace Player
             _controls?.Player.Roll.Disable();
         }
 
-        private void FixedUpdate()
+        private void Update()
         {
             if (!isLocalPlayer)
                 return;
@@ -78,6 +78,7 @@ namespace Player
             _rotationY += movementInput.x;
             _rotationZ += rollInput;
             
+            /*
             // Roll
             transform.Rotate(0f, 0f, _rotationZ, Space.Self);
  
@@ -86,7 +87,17 @@ namespace Player
  
             // Yaw
             transform.Rotate(0f, _rotationY, 0f, Space.Self);
-
+            */
+            
+            Vector3 roll = new Vector3(0.0f, 0.0f, _rotationZ);
+            _rigidbody.rotation *= Quaternion.Euler(roll.x, roll.y, roll.z);
+            
+            Vector3 pitch = new Vector3(_rotationX, 0.0f, 0.0f);
+            _rigidbody.rotation *= Quaternion.Euler(pitch.x, pitch.y, pitch.z);
+            
+            Vector3 yaw = new Vector3(0.0f, _rotationY, 0.0f);
+            _rigidbody.rotation *= Quaternion.Euler(yaw.x, yaw.y, yaw.z);
+            
             _rotationX = 0f;
             _rotationY = 0f;
             _rotationZ = 0f;

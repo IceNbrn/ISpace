@@ -32,7 +32,7 @@ public class @PlayerInActions : IInputActionCollection, IDisposable
                     ""id"": ""d266e60a-f793-4436-82c3-b8c3814a48b8"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
-                    ""interactions"": ""Hold""
+                    ""interactions"": """"
                 },
                 {
                     ""name"": ""Fire"",

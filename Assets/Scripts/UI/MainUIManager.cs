@@ -68,7 +68,8 @@ namespace UI
 
         public void JoinBtn(GameObject toolTip = null)
         {
-            DisableToolTip(toolTip); 
+            DisableToolTip(toolTip);
+            
             networkManager.StartClient();
             networkManager.networkAddress = ipAddressInput.text;
             
