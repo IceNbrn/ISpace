@@ -8,7 +8,7 @@ namespace Player
     {
         // Speeds
         [Header("Speeds Settings")]
-        [SerializeField] private float _moveSpeed      = 8f;
+        [SerializeField] private float _moveSpeed      = 15f;
         [SerializeField] private float _rollSpeed      = 40f;
         [SerializeField] private float _heightSpeed    = 8f;
         //[SerializeField] private float _drag           = 2f;
@@ -58,9 +58,15 @@ namespace Player
             if (!isLocalPlayer)
                 return;
             
-            Rotate();
             Move();
+            Rotate();
+            
             ControlHeight();
+            //ControlVelocity();
+        }
+
+        private void FixedUpdate()
+        {
             ControlVelocity();
         }
 
@@ -68,10 +74,7 @@ namespace Player
         {
             Vector2 movementInput = _controls.Player.Look.ReadValue<Vector2>();
             float rollInput = _controls.Player.Roll.ReadValue<float>();
-            Vector3 euler = _rigidbody.rotation.eulerAngles;
-            
-            
-            
+
             movementInput.x *= _mouseSensitivity;
             movementInput.y *= _mouseSensitivity;
             rollInput *= _rollSpeed * Time.deltaTime;
@@ -80,7 +83,7 @@ namespace Player
             _rotationY += movementInput.x;
             _rotationZ += rollInput;
             
-            /*
+            
             // Roll
             transform.Rotate(0f, 0f, _rotationZ, Space.Self);
  
@@ -89,8 +92,9 @@ namespace Player
  
             // Yaw
             transform.Rotate(0f, _rotationY, 0f, Space.Self);
-            */
             
+            
+            /*
             Vector3 roll = new Vector3(0.0f, 0.0f, _rotationZ);
             _rigidbody.rotation *= Quaternion.Euler(roll.x, roll.y, roll.z);
             
@@ -98,7 +102,7 @@ namespace Player
             _rigidbody.rotation *= Quaternion.Euler(pitch.x, pitch.y, pitch.z);
             
             Vector3 yaw = new Vector3(0.0f, _rotationY, 0.0f);
-            _rigidbody.rotation *= Quaternion.Euler(yaw.x, yaw.y, yaw.z);
+            _rigidbody.rotation *= Quaternion.Euler(yaw.x, yaw.y, yaw.z);*/
             
             _rotationX = 0f;
             _rotationY = 0f;
@@ -124,8 +128,10 @@ namespace Player
 
         private void ControlVelocity()
         {
+            _rigidbody.AddForce(_move, ForceMode.VelocityChange);
+            /*
             _rigidbody.velocity += _move;
-            _rigidbody.velocity = Vector3.ClampMagnitude(_rigidbody.velocity, _moveSpeed);
+            _rigidbody.velocity = Vector3.ClampMagnitude(_rigidbody.velocity, _moveSpeed);*/
             //_rigidbody.velocity *= Mathf.Exp(-Time.deltaTime * _drag);
         }
 

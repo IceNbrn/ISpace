@@ -1,4 +1,5 @@
 using System;
+using Mirror;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -6,13 +7,11 @@ namespace Player
 {
     public class PlayerCameraController : MonoBehaviour
     {
-        [SerializeField] private float _mouseSensitivity = 8.0f;
-        [SerializeField] private Transform _playerBody;
-        [SerializeField] private Rigidbody _playerBodyRigidbody;
         [SerializeField] private GameObject _fpsCamera;
+        [SerializeField] private Transform _cameraPosition;
+        
         private float _rotationX;
         private float _rotationY;
-        private Quaternion _rollRotation;
         
         private PlayerInActions _controls;
 
@@ -34,20 +33,10 @@ namespace Player
             _controls.Player.Look.Enable();
         }
 
-        public Tuple<Quaternion, Quaternion> Rotate()
+        private void LateUpdate()
         {
-            Vector2 movementInput = _controls.Player.Look.ReadValue<Vector2>();
-            movementInput.x *= _mouseSensitivity * Time.deltaTime;
-            movementInput.y *= _mouseSensitivity * Time.deltaTime;
-            Vector3 euler = _playerBodyRigidbody.rotation.eulerAngles;
-
-            _rotationX += movementInput.y;
-            _rotationY += movementInput.x;
-            
-            Quaternion yaw = Quaternion.Euler(Vector3.up * _rotationY);
-            Quaternion pitch = Quaternion.Euler(Vector3.left * _rotationX);
-
-            return new Tuple<Quaternion, Quaternion>(yaw, pitch);
+            transform.position = _cameraPosition.position;
+            transform.rotation = _cameraPosition.rotation;
         }
     }
 }
