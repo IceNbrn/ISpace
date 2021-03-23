@@ -11996,7 +11996,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6749501898610084980}
   serializedVersion: 2
-  m_Mass: 160
+  m_Mass: 100
   m_Drag: 1
   m_AngularDrag: 1
   m_UseGravity: 0
@@ -12141,7 +12141,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  _moveSpeed: 20
+  _moveSpeed: 8
   _rollSpeed: 40
   _heightSpeed: 8
   _dragColliding: 10000
@@ -12324,9 +12324,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 284bf18987391924bbd5e3495ff733b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mouseSensitivity: 2
-  _playerBody: {fileID: 6749501898610084983}
-  _playerBodyRigidbody: {fileID: 6749501898610084979}
   _fpsCamera: {fileID: 6749501898902672184}
   _cameraPosition: {fileID: 8844552308825784693}
 --- !u!1 &6995731379370042064

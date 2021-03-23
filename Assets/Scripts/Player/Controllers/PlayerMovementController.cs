@@ -58,15 +58,16 @@ namespace Player
             if (!isLocalPlayer)
                 return;
             
-            Move();
             Rotate();
-            
+            Move();
             ControlHeight();
             //ControlVelocity();
         }
 
+        
         private void FixedUpdate()
         {
+            
             ControlVelocity();
         }
 
@@ -113,7 +114,7 @@ namespace Player
         {
             Vector2 movementInput = _controls.Player.Move.ReadValue<Vector2>();
             _move += transform.right * movementInput.x + transform.forward * movementInput.y;
-            _move *= _moveSpeed * Time.deltaTime;
+            _move *= _moveSpeed * Time.fixedDeltaTime;
         }
         
         private void ControlHeight()
@@ -122,13 +123,13 @@ namespace Player
             if (Mathf.Abs(movementInput) > 0.0001f)
             {
                 _move += transform.up * movementInput;
-                _move *= _heightSpeed * Time.deltaTime;
+                _move *= _heightSpeed * Time.fixedDeltaTime;
             }
         }
 
         private void ControlVelocity()
         {
-            _rigidbody.AddForce(_move, ForceMode.VelocityChange);
+            _rigidbody.velocity += _move;
             /*
             _rigidbody.velocity += _move;
             _rigidbody.velocity = Vector3.ClampMagnitude(_rigidbody.velocity, _moveSpeed);*/

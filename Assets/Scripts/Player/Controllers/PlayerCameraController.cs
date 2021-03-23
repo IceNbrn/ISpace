@@ -32,11 +32,11 @@ namespace Player
         {
             _controls.Player.Look.Enable();
         }
-
+        /*
         private void LateUpdate()
         {
             transform.position = _cameraPosition.position;
             transform.rotation = _cameraPosition.rotation;
-        }
+        }*/
     }
 }
