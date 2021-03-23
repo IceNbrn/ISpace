@@ -7,19 +7,37 @@ namespace Player
 {
     public class PlayerCameraController : MonoBehaviour
     {
-        [SerializeField] private GameObject _fpsCamera;
-        [SerializeField] private Transform _cameraPosition;
+        [SerializeField] private GameObject fpsCamera;
+        [SerializeField] private Camera camera;
+        [SerializeField] private AudioListener audioListener;
+        [SerializeField] private Transform playerTransform;
+        [SerializeField] private Vector3 offset;
+        
+        private Transform _cameraTransform;
+
+        private NetworkIdentity _localPlayer;
         
         private float _rotationX;
         private float _rotationY;
         
         private PlayerInActions _controls;
 
-        private void Start()
+        private void Awake()
         {
-            _fpsCamera.SetActive(true);
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
+            LocalPlayerAnnouncer.OnLocalPlayerUpdated += OnLocalPlayerUpdated;
+            SpacePlayer.OnPlayerStatusUpdated += OnPlayerStatusUpdated;
+        }
+
+        private void OnPlayerStatusUpdated(EPlayerStatus status)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void OnLocalPlayerUpdated(NetworkIdentity obj)
+        {
+            _localPlayer = obj;
+
+            InitializeCamera();
         }
 
         private void OnEnable()
@@ -32,11 +50,38 @@ namespace Player
         {
             _controls.Player.Look.Enable();
         }
-        /*
-        private void LateUpdate()
+        
+        Vector3 _velocity = Vector3.zero;
+        [SerializeField] private float lerpSpeed = 10.0f;
+        
+        private void FixedUpdate()
         {
-            transform.position = _cameraPosition.position;
-            transform.rotation = _cameraPosition.rotation;
-        }*/
+            /*
+            transform.position = Vector3.SmoothDamp(transform.position, cameraPosition.position, ref _velocity, Time.deltaTime * lerpSpeed);
+            transform.rotation = Quaternion.Lerp(transform.rotation, cameraPosition.rotation, Time.deltaTime * lerpSpeed);*/
+            if (!camera.enabled)
+                return;
+            
+            transform.position = _cameraTransform.position;
+            transform.rotation = _cameraTransform.rotation;
+        }
+
+        private bool InitializeCamera()
+        {
+            if (_localPlayer != null)
+            {
+                camera.enabled = true;
+                audioListener.enabled = true;
+                
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+
+                _cameraTransform = _localPlayer.GetComponent<SpacePlayer>().CameraTransform;
+                
+                return true;
+            }
+
+            return false;
+        }
     }
 }

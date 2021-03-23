@@ -8,7 +8,7 @@ using Random = UnityEngine.Random;
 
 namespace Player
 {
-    enum EPlayerStatus
+    public enum EPlayerStatus
     {
         ALIVE,
         DEAD,
@@ -43,7 +43,9 @@ namespace Player
         // ---------------- Systems ---------------- 
         [Header("Systems")]
         [SerializeField] private Weapon weapon;
-        
+
+        [Tooltip("Position of the camera to be set")]
+        [SerializeField] private Transform cameraTransform;
         [SerializeField] private Collider[] colliders;
 
         // ---------------- UI ---------------- 
@@ -57,9 +59,21 @@ namespace Player
         [SerializeField] private GameObject bodyModel;
         [SerializeField] private GameObject weaponModel;
 
+        private NetworkIdentity _networkIdentity;
+        
+        public static Action<EPlayerStatus> OnPlayerStatusUpdated;
+        public ref Transform CameraTransform => ref cameraTransform;
+
         private void Start()
         {
             _deathUIManager = deathScreenUI.GetComponent<DeathUIManager>();
+            _networkIdentity = GetComponent<NetworkIdentity>();
+
+            /*if (_networkIdentity.isLocalPlayer)
+            {
+                //bodyModel.SetActive(false);
+                weaponModel.SetActive(false);
+            }*/
         }
 
         public override void OnStartClient()
@@ -164,6 +178,7 @@ namespace Player
                 default:
                     break;
             }
+            OnPlayerStatusUpdated?.Invoke(status);
         }
 
         private void SetCollidersActive(bool value)

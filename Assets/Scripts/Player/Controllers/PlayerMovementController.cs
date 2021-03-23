@@ -14,9 +14,10 @@ namespace Player
         //[SerializeField] private float _drag           = 2f;
         [SerializeField] private float _dragColliding  = 100f;
         
-        // Camera
         [SerializeField] private float _mouseSensitivity = 13f;
-        [SerializeField] private GameObject _camera;
+        
+        // UI
+        [SerializeField] private GameObject _canvasUI;
         
         private float _rotationX, _rotationY, _rotationZ;
         
@@ -31,7 +32,7 @@ namespace Player
             if (!isLocalPlayer)
                 return;
             
-            _camera.SetActive(true);
+            _canvasUI.SetActive(true);
             _rigidbody = GetComponent<Rigidbody>();
         }
         
@@ -67,6 +68,8 @@ namespace Player
         
         private void FixedUpdate()
         {
+            if (!isLocalPlayer)
+                return;
             
             ControlVelocity();
         }

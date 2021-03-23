@@ -31,30 +31,27 @@ namespace UI
                 return;
             
             string infoResult = String.Empty;
-
-            int ping = (int)NetworkTime.rtt * 1000;
+            int ping = (int) (NetworkTime.rtt / 2) * 1000;
             
-
             if (showPing)
                 infoResult += $"[Ping]       : {ping} ms\n";
 
-            
-            
             int playesOnline = GameManager.PlayersOnline;
-            
             infoResult += $"[Players] : {playesOnline}/{networkManager.maxConnections}";
             
+            textFps.SetText($"[FPS] {_avgFps}");
             textInfo.SetText(infoResult);
         }
 
+        private float _avgFps;
+        
         private void Update()
         {
-            if (Time.unscaledTime > _timer)
-            {
-                int fps = (int)(1f / Time.unscaledDeltaTime);
-                textFps.SetText($"[FPS]       : {fps}\n");
-                _timer = Time.unscaledTime + hudRefreshRate;
-            }
+            
+            float current = 0;
+            current = (int)(1f / Time.unscaledDeltaTime);
+            _avgFps = (int)current;
+            
         }
     }
 }
