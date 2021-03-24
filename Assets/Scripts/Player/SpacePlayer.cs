@@ -3,6 +3,7 @@ using System.Collections;
 using Mirror;
 using UI;
 using UnityEngine;
+using UnityEngine.Rendering;
 using Weapons;
 using Random = UnityEngine.Random;
 
@@ -58,22 +59,26 @@ namespace Player
         [Header("Visuals")] 
         [SerializeField] private GameObject bodyModel;
         [SerializeField] private GameObject weaponModel;
-
-        private NetworkIdentity _networkIdentity;
+        
+        // ---------------- Renderers ---------------- 
+        [Header("Renderers")] 
+        [SerializeField] private MeshRenderer[] meshRenderers;
+        
         
         public static Action<EPlayerStatus> OnPlayerStatusUpdated;
         public ref Transform CameraTransform => ref cameraTransform;
+        
+        private NetworkIdentity _networkIdentity;
 
         private void Start()
         {
             _deathUIManager = deathScreenUI.GetComponent<DeathUIManager>();
             _networkIdentity = GetComponent<NetworkIdentity>();
 
-            /*if (_networkIdentity.isLocalPlayer)
-            {
-                //bodyModel.SetActive(false);
-                weaponModel.SetActive(false);
-            }*/
+            _currentHealth = health;
+            
+            // Make the player body only visible to other players
+            SetMeshRendersActive(!_networkIdentity.isLocalPlayer);
         }
 
         public override void OnStartClient()
@@ -195,6 +200,14 @@ namespace Player
             int index = Random.Range(0, maxPositions);
             Vector3 position = NetworkManager.startPositions[index].position;
             transform.position = position;
+        }
+
+        private void SetMeshRendersActive(bool value)
+        {
+            foreach (MeshRenderer meshRenderer in meshRenderers)
+            {
+                meshRenderer.shadowCastingMode = value ? ShadowCastingMode.On : ShadowCastingMode.ShadowsOnly;
+            }
         }
     }
 }

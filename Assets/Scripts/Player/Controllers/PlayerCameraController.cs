@@ -12,6 +12,7 @@ namespace Player
         [SerializeField] private AudioListener audioListener;
         [SerializeField] private Transform playerTransform;
         [SerializeField] private Vector3 offset;
+        [SerializeField] private GameObject weaponModel;
         
         private Transform _cameraTransform;
 
@@ -30,7 +31,23 @@ namespace Player
 
         private void OnPlayerStatusUpdated(EPlayerStatus status)
         {
-            throw new NotImplementedException();
+            switch (status)
+            {
+                case EPlayerStatus.ALIVE:
+                    // Models
+                    weaponModel.SetActive(true);
+                    break;
+                case EPlayerStatus.DEAD:
+                    // Models
+                    weaponModel.SetActive(false);
+                    break;
+                case EPlayerStatus.SPECTATING:
+                    // Models
+                    weaponModel.SetActive(false);
+                    break;
+                default:
+                    break;
+            }
         }
 
         private void OnLocalPlayerUpdated(NetworkIdentity obj)
