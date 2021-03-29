@@ -57,7 +57,11 @@ namespace UI
         public void QuitBtn()
         {
             // TODO: Make sure wants to quit
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
             Application.Quit();
+#endif
         }
 
         public void HostBtn(GameObject toolTip = null)

@@ -14,7 +14,7 @@ namespace Player
         //[SerializeField] private float _drag           = 2f;
         [SerializeField] private float _dragColliding  = 100f;
         
-        [SerializeField] private float _mouseSensitivity = 13f;
+        private static float _mouseSensitivity;
         
         // UI
         [SerializeField] private GameObject _canvasUI;
@@ -31,6 +31,8 @@ namespace Player
         {
             if (!isLocalPlayer)
                 return;
+
+            _mouseSensitivity = GameManager.Singleton.GetPlayerSettings().Sensitivity * 0.1f;
             
             _canvasUI.SetActive(true);
             _rigidbody = GetComponent<Rigidbody>();
@@ -154,5 +156,7 @@ namespace Player
             _rigidbody.angularDrag = 1f;
             //_rigidbody.freezeRotation = false;
         }
+
+        public static void SetSensitivity(float value) => _mouseSensitivity = value;
     }
 }

@@ -8,9 +8,12 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Singleton { get; private set; }
     public static int PlayersOnline { get; private set; }
-
+    
     private const string PLAYER_PREFIX = "Player ";
     private static Dictionary<string, SpacePlayer> _players = new Dictionary<string, SpacePlayer>();
+    
+    [SerializeField] 
+    private PlayerSettings PlayerSettings;
 
     // Start is called before the first frame update
     void Awake()
@@ -66,4 +69,12 @@ public class GameManager : MonoBehaviour
 
     public static SpacePlayer GetPlayer(string playerId) => _players[playerId];
 
+    public void SetSensitivity(float value)
+    {
+        value *= 0.1f;
+        PlayerSettings.Sensitivity = value;
+        PlayerMovementController.SetSensitivity(value);
+    }
+
+    public ref PlayerSettings GetPlayerSettings() => ref PlayerSettings;
 }

@@ -536,6 +536,14 @@
                     "expectedControlType": "Quaternion",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "DevConsole",
+                    "type": "Button",
+                    "id": "f04e17ae-e7e6-44be-b298-04b33a1786a9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -954,6 +962,17 @@
                     "processors": "",
                     "groups": "XR",
                     "action": "TrackedDeviceOrientation",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d89f1b67-28a4-40f9-9d75-3e930d5530cf",
+                    "path": "<Keyboard>/f1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "DevConsole",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
