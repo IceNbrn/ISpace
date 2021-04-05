@@ -170,7 +170,6 @@ MonoBehaviour:
   textInfo: {fileID: 4171872126349107098}
   textFps: {fileID: 4743086430194102333}
   textHealth: {fileID: 8078706456422938796}
-  hudRefreshRate: 1
 --- !u!114 &2812002699919703685
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12081,6 +12080,7 @@ GameObject:
   - component: {fileID: 6749501898610084982}
   - component: {fileID: 6458375402634000901}
   - component: {fileID: 7159174417628919561}
+  - component: {fileID: -4835516275306546506}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -12314,7 +12314,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  health: 100
+  playerStats: {fileID: -4835516275306546506}
+  DebugCurrentHealth: 0
   canRespawn: 1
   timeToRespawn: 3
   weapon: {fileID: 0}
@@ -12331,6 +12332,26 @@ MonoBehaviour:
   - {fileID: 6749501897426339700}
   - {fileID: 8691245701501202452}
   - {fileID: 7738510593778004555}
+--- !u!114 &-4835516275306546506
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6749501898610084980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 701fef94b3f34cf29a8ef59647e6b34d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  Health: 100
+  Kills: 0
+  Deaths: 0
+  KillRatio: 0
+  KilledBy: 
+  CurrentHealth: 0
 --- !u!1 &6749501898902672184
 GameObject:
   m_ObjectHideFlags: 0
@@ -12468,7 +12489,6 @@ MonoBehaviour:
   playerTransform: {fileID: 6749501898610084983}
   offset: {x: 0, y: 0.801, z: -0.004999876}
   weaponModel: {fileID: 0}
-  lerpSpeed: 10
 --- !u!114 &8853188908148530306
 MonoBehaviour:
   m_ObjectHideFlags: 0

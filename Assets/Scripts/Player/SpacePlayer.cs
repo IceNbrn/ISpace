@@ -22,7 +22,7 @@ namespace Player
         [Header("Stats")]
         [SerializeField] 
         private PlayerStats playerStats;
-        
+
         public PlayerStats PlayerStats => playerStats;
 
         // ---------------- Respawn ----------------  
@@ -97,29 +97,30 @@ namespace Player
         }
         
         public void SetRespawnPoint(Vector3 position) => _respawnPoint = position;
-        
-        [ClientRpc]
-        public void RpcTakeDamage(float damage, string fromPlayer)
-        {
-            Debug.Log($"Taking Damage: {damage} from {fromPlayer}");
-            playerStats.CurrentHealth -= damage;
 
+        [ClientRpc]
+        private void Respawn()
+        {
+            StartCoroutine(RespawnCoroutine());
+        }
+        
+        [Server]
+        public void TakeDamage(float damage, string fromPlayer)
+        {
+            Debug.Log($"(CMD)Taking Damage: {damage} from {fromPlayer}");
+            playerStats.CurrentHealth -= damage;
+            
             if (playerStats.CurrentHealth <= 0.0f)
             {
                 if (canRespawn && !_respawning)
                 {
                     // Player is dead, so time to respawn
                     playerStats.AddDeath(fromPlayer);
-                    /*
-                    _deaths++;
-                    _killedBy = fromPlayer;*/
-                    StartCoroutine(RespawnCoroutine());
+                    Respawn();
                     
                     //TODO: Send a rpc to the killer saying that he killed me
                 }
-                return;
             }
-            return;
         }
 
         private IEnumerator RespawnCoroutine()
@@ -205,6 +206,11 @@ namespace Player
             {
                 meshRenderer.shadowCastingMode = value ? ShadowCastingMode.On : ShadowCastingMode.ShadowsOnly;
             }
+        }
+
+        private void SetPlayerStats(PlayerStats oldStats, PlayerStats newStats)
+        {
+            oldStats = newStats;
         }
     }
 }

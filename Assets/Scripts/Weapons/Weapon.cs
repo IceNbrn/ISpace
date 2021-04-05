@@ -183,8 +183,12 @@ namespace Weapons
             SpacePlayer player = GameManager.GetPlayer(playerId);
             if (damage >= 0.0f && damage <= weaponInfo.Damage)
             {
-                player.RpcTakeDamage(damage, fromPlayer);
-                
+                player.TakeDamage(damage, fromPlayer);
+                /*
+                if (!hasAuthority && !isServer)
+                    player.TakeDamage(damage, fromPlayer);
+                else
+                    player.RpcTakeDamage(damage, fromPlayer);*/
             }
         }
 
