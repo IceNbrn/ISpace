@@ -1,5 +1,6 @@
 using System;
 using Mirror;
+using Player;
 using TMPro;
 using UnityEngine;
 
@@ -8,15 +9,14 @@ namespace UI
     public class PlayerUIManager : MonoBehaviour
     {
         [SerializeField] 
+        private SpacePlayer player;
+        
+        [SerializeField] 
         private bool showPing = true;
 
         [SerializeField] 
-        private TextMeshProUGUI textInfo, textFps;
-        
-        [SerializeField] private float hudRefreshRate = 1f;
-        
-        private float _timer;
-        
+        private TextMeshProUGUI textInfo, textFps, textHealth;
+
         // Start is called before the first frame update
         void Start()
         {
@@ -41,6 +41,7 @@ namespace UI
             
             textFps.SetText($"[FPS] {_avgFps}");
             textInfo.SetText(infoResult);
+            textHealth.SetText($"{player.PlayerStats.CurrentHealth.ToString()} HP");
         }
 
         private float _avgFps;

@@ -68,9 +68,6 @@ namespace Player
             _controls.Player.Look.Enable();
         }
         
-        Vector3 _velocity = Vector3.zero;
-        [SerializeField] private float lerpSpeed = 10.0f;
-        
         private void FixedUpdate()
         {
             /*

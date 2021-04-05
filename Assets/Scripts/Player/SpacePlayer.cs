@@ -20,15 +20,10 @@ namespace Player
     {
         // ----------------  Stats  ----------------  
         [Header("Stats")]
-        [SerializeField]
-        private float health = 100.0f;
-
-        private int _kills, _deaths;
-        private float _killRatio;
-        private string _killedBy;
-        private float _currentHealth;
-
-        public float GetHealth => health;
+        [SerializeField] 
+        private PlayerStats playerStats;
+        
+        public PlayerStats PlayerStats => playerStats;
 
         // ---------------- Respawn ----------------  
         [Header("Respawn")]
@@ -75,7 +70,7 @@ namespace Player
             _deathUIManager = deathScreenUI.GetComponent<DeathUIManager>();
             _networkIdentity = GetComponent<NetworkIdentity>();
 
-            _currentHealth = health;
+            playerStats.ResetCurrentHealth();
             
             // Make the player body only visible to other players
             SetMeshRendersActive(!_networkIdentity.isLocalPlayer);
@@ -107,15 +102,17 @@ namespace Player
         public void RpcTakeDamage(float damage, string fromPlayer)
         {
             Debug.Log($"Taking Damage: {damage} from {fromPlayer}");
-            _currentHealth -= damage;
+            playerStats.CurrentHealth -= damage;
 
-            if (_currentHealth <= 0.0f)
+            if (playerStats.CurrentHealth <= 0.0f)
             {
                 if (canRespawn && !_respawning)
                 {
                     // Player is dead, so time to respawn
+                    playerStats.AddDeath(fromPlayer);
+                    /*
                     _deaths++;
-                    _killedBy = fromPlayer;
+                    _killedBy = fromPlayer;*/
                     StartCoroutine(RespawnCoroutine());
                     
                     //TODO: Send a rpc to the killer saying that he killed me
@@ -130,17 +127,17 @@ namespace Player
             _respawning = true;
             
             SetPlayerStatus(EPlayerStatus.DEAD);
-            _deathUIManager.SetTextKilledBy(_killedBy, "TEST");
+            _deathUIManager.SetTextKilledBy(playerStats.KilledBy, "TEST");
             
             yield return new WaitForSeconds(timeToRespawn);
             
             _deathUIManager.SetKilledTextEmpty();
-            _killedBy = String.Empty;
+            playerStats.ResetKilledBy();
             
             ChangePlayerPosition();
             SetPlayerStatus(EPlayerStatus.ALIVE);
 
-            _currentHealth = health;
+            playerStats.ResetCurrentHealth();
             _respawning = false;
         }
 

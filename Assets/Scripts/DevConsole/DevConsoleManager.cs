@@ -17,6 +17,8 @@ namespace DevConsole
         // UI
         [SerializeField]
         private GameObject _canvas;
+        [SerializeField]
+        private TMP_InputField input;
         private bool _isConsoleActive;
         
         // Commands
@@ -24,6 +26,7 @@ namespace DevConsole
 
         public static ConsoleCommand CMD_HELP;
         public static ConsoleCommand<float> CMD_PLAYER_SENSITIVITY;
+        public static ConsoleCommand CMD_QUIT;
         
         private void Awake()
         {
@@ -72,14 +75,24 @@ namespace DevConsole
                 GameManager.Singleton.SetSensitivity(value);
             });
             
+            CMD_QUIT = new ConsoleCommand("quit", "Quits game", "quit",() =>
+            {
+#if UNITY_EDITOR
+                UnityEditor.EditorApplication.isPlaying = false;
+#else
+                Application.Quit();
+#endif
+            });
+            
             _commands = new List<object>()
             {
                 CMD_HELP,
-                CMD_PLAYER_SENSITIVITY
+                CMD_PLAYER_SENSITIVITY,
+                CMD_QUIT
             };
         }
 
-        public void HandleInput(TMP_InputField input)
+        public void HandleInput()
         {
             string inputText = input.text.ToLower();
             Debug.Log($"Input text: {inputText}");
@@ -108,6 +121,8 @@ namespace DevConsole
                     }
                 }
             }
+            input.Select();
+            input.ActivateInputField();
         }
 
         private void ToggleConsole()
@@ -115,6 +130,12 @@ namespace DevConsole
             _isConsoleActive = !_isConsoleActive;
             LockPlayer(_isConsoleActive);
             _canvas.SetActive(_isConsoleActive);
+
+            if (_isConsoleActive)
+            {
+                input.Select();
+                input.ActivateInputField();
+            }
             
         }
 
