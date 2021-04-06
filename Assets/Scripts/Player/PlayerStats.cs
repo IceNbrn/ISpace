@@ -10,17 +10,23 @@ namespace Player
         [SyncVar] public int Kills;
         [SyncVar] public int Deaths;
         [SyncVar] public float KillRatio;
-        [SyncVar] public string KilledBy;
+        [SyncVar] public string KilledByPlayer;
+        [SyncVar] public string KilledByWeapon;
         [SyncVar] public float CurrentHealth;
 
         public void ResetCurrentHealth() => CurrentHealth = Health;
 
-        public void AddDeath(string killerName)
+        public void AddDeath(string killerName, string weaponName)
         {
             Deaths++;
-            KilledBy = killerName;
+            KilledByPlayer = killerName;
+            KilledByWeapon = weaponName;
         }
 
-        public void ResetKilledBy() => KilledBy = String.Empty;
+        public void ResetKilledBy()
+        {
+            KilledByWeapon = String.Empty;
+            KilledByPlayer = String.Empty;
+        }
     }
 }

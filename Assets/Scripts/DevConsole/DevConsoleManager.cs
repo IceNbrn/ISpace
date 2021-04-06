@@ -39,11 +39,6 @@ namespace DevConsole
             
             InitializeCommands();
         }
-
-        private void OnDisable()
-        {
-            _controls.UI.DevConsole.Disable();
-        }
         
         private bool InitializeSingleton()
         {

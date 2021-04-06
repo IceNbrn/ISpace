@@ -99,13 +99,15 @@ namespace Player
         public void SetRespawnPoint(Vector3 position) => _respawnPoint = position;
 
         [ClientRpc]
-        private void Respawn()
+        private void RpcRespawn(string fromPlayer, string weaponName)
         {
+            playerStats.AddDeath(fromPlayer, weaponName);
             StartCoroutine(RespawnCoroutine());
+            
         }
         
         [Server]
-        public void TakeDamage(float damage, string fromPlayer)
+        public void TakeDamage(float damage, string fromPlayer, string weaponName)
         {
             Debug.Log($"(CMD)Taking Damage: {damage} from {fromPlayer}");
             playerStats.CurrentHealth -= damage;
@@ -115,8 +117,9 @@ namespace Player
                 if (canRespawn && !_respawning)
                 {
                     // Player is dead, so time to respawn
-                    playerStats.AddDeath(fromPlayer);
-                    Respawn();
+                    //playerStats.AddDeath(fromPlayer, weaponName);
+                    
+                    RpcRespawn(fromPlayer, weaponName);
                     
                     //TODO: Send a rpc to the killer saying that he killed me
                 }
@@ -128,12 +131,11 @@ namespace Player
             _respawning = true;
             
             SetPlayerStatus(EPlayerStatus.DEAD);
-            _deathUIManager.SetTextKilledBy(playerStats.KilledBy, "TEST");
+            _deathUIManager.SetTextKilledBy(playerStats.KilledByPlayer, playerStats.KilledByWeapon);
             
             yield return new WaitForSeconds(timeToRespawn);
             
             _deathUIManager.SetKilledTextEmpty();
-            playerStats.ResetKilledBy();
             
             ChangePlayerPosition();
             SetPlayerStatus(EPlayerStatus.ALIVE);
