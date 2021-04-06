@@ -12,23 +12,25 @@ namespace Game.Managers
         [SerializeField] private float killFeedTime = 3.0f;
         [SerializeField] private GameObject killFeed;
         [SerializeField] private TextMeshProUGUI killFeedText;
+        [SerializeField] private TextMeshProUGUI killFeedWeaponText;
 
         private string _currentText;
+        private string _currentWeaponText;
         private bool _isKillFeedActive;
-        private EPlayerStatus? _status;
+        private DeathInfo? _deadInfo;
         
         
         private void Awake()
         {
-            SpacePlayer.OnPlayerStatusUpdated += OnPlayerStatusUpdated;
+            SpacePlayer.OnPlayerDies += OnPlayerDies;
         }
 
         
-        private void OnPlayerStatusUpdated(EPlayerStatus obj)
+        private void OnPlayerDies(DeathInfo deadInfo)
         {
             if (!isLocalPlayer) return;
             
-            _status = obj;
+            _deadInfo = deadInfo;
             CmdShowKillFeed();
         }
 
@@ -50,15 +52,19 @@ namespace Game.Managers
         private IEnumerator ShowKillFeedCoroutine()
         {
             _isKillFeedActive = true;
-
             killFeed.SetActive(true);
-           
-            killFeedText.SetText($"{_status?.ToString()} \n {_currentText} \n");
+
+            if (_deadInfo.HasValue)
+            {
+                DeathInfo info = _deadInfo.Value;
+                killFeedText.SetText($"{info.KilledByPlayer} killed {info.PlayerKilled} \n {_currentText}");
+                killFeedWeaponText.SetText($"{info.KilledByWeapon} \n {_currentWeaponText}");
+            }
             
             yield return new WaitForSeconds(killFeedTime);
             killFeed.SetActive(false);
             _isKillFeedActive = false;
-            _status = null;
+            _deadInfo = null;
         }
     }
 }

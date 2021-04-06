@@ -15,6 +15,20 @@ namespace Player
         DEAD,
         SPECTATING
     }
+
+    public struct DeathInfo 
+    {
+        public string PlayerKilled { get; private set; }
+        public string KilledByPlayer { get; private set; }
+        public string KilledByWeapon { get; private set; }
+
+        public DeathInfo(string playerKilled, string killedByPlayer, string killedByWeapon)
+        {
+            PlayerKilled = playerKilled;
+            KilledByPlayer = killedByPlayer;
+            KilledByWeapon = killedByWeapon;
+        }
+    }
     
     public class SpacePlayer : NetworkBehaviour
     {
@@ -59,8 +73,8 @@ namespace Player
         [Header("Renderers")] 
         [SerializeField] private MeshRenderer[] meshRenderers;
         
-        
         public static Action<EPlayerStatus> OnPlayerStatusUpdated;
+        public static Action<DeathInfo> OnPlayerDies;
         public ref Transform CameraTransform => ref cameraTransform;
         
         private NetworkIdentity _networkIdentity;
@@ -101,9 +115,10 @@ namespace Player
         [ClientRpc]
         private void RpcRespawn(string fromPlayer, string weaponName)
         {
+            DeathInfo deathInfo = new DeathInfo(_networkIdentity.name, fromPlayer, weaponName);
+            OnPlayerDies?.Invoke(deathInfo);
             playerStats.AddDeath(fromPlayer, weaponName);
             StartCoroutine(RespawnCoroutine());
-            
         }
         
         [Server]
@@ -111,19 +126,11 @@ namespace Player
         {
             Debug.Log($"(CMD)Taking Damage: {damage} from {fromPlayer}");
             playerStats.CurrentHealth -= damage;
+
+            bool isPlayerDead = playerStats.CurrentHealth <= 0.0f && canRespawn && !_respawning;
             
-            if (playerStats.CurrentHealth <= 0.0f)
-            {
-                if (canRespawn && !_respawning)
-                {
-                    // Player is dead, so time to respawn
-                    //playerStats.AddDeath(fromPlayer, weaponName);
-                    
-                    RpcRespawn(fromPlayer, weaponName);
-                    
-                    //TODO: Send a rpc to the killer saying that he killed me
-                }
-            }
+            if (isPlayerDead)
+                RpcRespawn(fromPlayer, weaponName);
         }
 
         private IEnumerator RespawnCoroutine()
