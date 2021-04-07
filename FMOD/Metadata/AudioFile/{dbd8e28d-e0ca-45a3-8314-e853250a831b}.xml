@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.01.00">
+	<object class="AudioFile" id="{dbd8e28d-e0ca-45a3-8314-e853250a831b}">
+		<property name="assetPath">
+			<value>ISpace Menu Sound 2.wav</value>
+		</property>
+		<property name="isStreaming">
+			<value>true</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>31</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{1d535e45-f6ac-4cf6-b8bd-278980fce29d}</destination>
+		</relationship>
+	</object>
+</objects>
