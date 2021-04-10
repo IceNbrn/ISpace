@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using Player;
 using TMPro;
+using UI.ScoreBoard;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace DevConsole
@@ -26,6 +28,7 @@ namespace DevConsole
 
         public static ConsoleCommand CMD_HELP;
         public static ConsoleCommand<float> CMD_PLAYER_SENSITIVITY;
+        public static ConsoleCommand CMD_ADD_SCORE_ROW;
         public static ConsoleCommand CMD_QUIT;
         
         private void Awake()
@@ -70,6 +73,12 @@ namespace DevConsole
                 GameManager.Singleton.SetSensitivity(value);
             });
             
+            CMD_ADD_SCORE_ROW = new ConsoleCommand("addScoreRow", "adds score row", "addScoreRow",() =>
+            {
+                ScoreRowData rowData = new ScoreRowData("Player", 1, 2, 3, 4); 
+                ScoreBoardManager.Singleton.AddRow(rowData);
+            });
+            
             CMD_QUIT = new ConsoleCommand("quit", "Quits game", "quit",() =>
             {
 #if UNITY_EDITOR
@@ -83,6 +92,7 @@ namespace DevConsole
             {
                 CMD_HELP,
                 CMD_PLAYER_SENSITIVITY,
+                CMD_ADD_SCORE_ROW,
                 CMD_QUIT
             };
         }
@@ -96,28 +106,34 @@ namespace DevConsole
             for (int i = 0; i < _commands.Count; ++i)
             {
                 object command = _commands[i];
-                if (command is ConsoleCommandBase commandBase && inputText.Contains(commandBase.CommandId))
-                {
-                    if (command is ConsoleCommand)
-                    {
-                        ((ConsoleCommand)command)?.Invoke();
-                    }
-                    else if (command is ConsoleCommand<int>)
-                    {
-                        int value = int.Parse(args[1]);
-                        ((ConsoleCommand<int>)command)?.Invoke(value);
-                    }
-                    else if (command is ConsoleCommand<float>)
-                    {
-                        string args1 = args[1];
-                        args1 = args1.Replace(".", ",");
-                        float value = float.Parse(args1);
-                        ((ConsoleCommand<float>)command)?.Invoke(value);
-                    }
-                }
+                RunCommand(ref command, inputText, ref args);
             }
             input.Select();
             input.ActivateInputField();
+        }
+
+        private void RunCommand(ref object command, string inputText, ref string[] args)
+        {
+            Debug.Log($"Run Command {inputText}");
+            if (command is ConsoleCommandBase commandBase && inputText.Contains(commandBase.CommandId))
+            {
+                if (command is ConsoleCommand)
+                {
+                    ((ConsoleCommand)command)?.Invoke();
+                }
+                else if (command is ConsoleCommand<int>)
+                {
+                    int value = int.Parse(args[1]);
+                    ((ConsoleCommand<int>)command)?.Invoke(value);
+                }
+                else if (command is ConsoleCommand<float>)
+                {
+                    string args1 = args[1];
+                    args1 = args1.Replace(".", ",");
+                    float value = float.Parse(args1);
+                    ((ConsoleCommand<float>)command)?.Invoke(value);
+                }
+            }
         }
 
         private void ToggleConsole()
@@ -136,6 +152,7 @@ namespace DevConsole
 
         private void LockPlayer(bool value)
         {
+            
             if (value)
             {
                 Cursor.visible = true;
@@ -144,8 +161,16 @@ namespace DevConsole
             }
             else
             {
-                Cursor.visible = false;
-                Cursor.lockState = CursorLockMode.Locked;
+                if (SceneManager.GetActiveScene().name.Contains("Game"))
+                {
+                    Cursor.visible = false;
+                    Cursor.lockState = CursorLockMode.Locked;
+                }
+                else
+                {
+                    Cursor.visible = true;
+                    Cursor.lockState = CursorLockMode.None;
+                }
                 _controls.Player.Enable();
             }
                 

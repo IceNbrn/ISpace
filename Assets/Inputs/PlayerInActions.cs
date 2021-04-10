@@ -65,6 +65,14 @@ public class @PlayerInActions : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Scoreboard"",
+                    ""type"": ""Button"",
+                    ""id"": ""d3414d51-a6dc-427a-9a24-5eff8cf8d5e1"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Hold""
                 }
             ],
             ""bindings"": [
@@ -461,6 +469,17 @@ public class @PlayerInActions : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Reload"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4e549160-0cd7-45a4-a795-acb57d05b40f"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Scoreboard"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1063,6 +1082,7 @@ public class @PlayerInActions : IInputActionCollection, IDisposable
         m_Player_Height = m_Player.FindAction("Height", throwIfNotFound: true);
         m_Player_Roll = m_Player.FindAction("Roll", throwIfNotFound: true);
         m_Player_Reload = m_Player.FindAction("Reload", throwIfNotFound: true);
+        m_Player_Scoreboard = m_Player.FindAction("Scoreboard", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1131,6 +1151,7 @@ public class @PlayerInActions : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Height;
     private readonly InputAction m_Player_Roll;
     private readonly InputAction m_Player_Reload;
+    private readonly InputAction m_Player_Scoreboard;
     public struct PlayerActions
     {
         private @PlayerInActions m_Wrapper;
@@ -1141,6 +1162,7 @@ public class @PlayerInActions : IInputActionCollection, IDisposable
         public InputAction @Height => m_Wrapper.m_Player_Height;
         public InputAction @Roll => m_Wrapper.m_Player_Roll;
         public InputAction @Reload => m_Wrapper.m_Player_Reload;
+        public InputAction @Scoreboard => m_Wrapper.m_Player_Scoreboard;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1168,6 +1190,9 @@ public class @PlayerInActions : IInputActionCollection, IDisposable
                 @Reload.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnReload;
                 @Reload.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnReload;
                 @Reload.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnReload;
+                @Scoreboard.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnScoreboard;
+                @Scoreboard.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnScoreboard;
+                @Scoreboard.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnScoreboard;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -1190,6 +1215,9 @@ public class @PlayerInActions : IInputActionCollection, IDisposable
                 @Reload.started += instance.OnReload;
                 @Reload.performed += instance.OnReload;
                 @Reload.canceled += instance.OnReload;
+                @Scoreboard.started += instance.OnScoreboard;
+                @Scoreboard.performed += instance.OnScoreboard;
+                @Scoreboard.canceled += instance.OnScoreboard;
             }
         }
     }
@@ -1360,6 +1388,7 @@ public class @PlayerInActions : IInputActionCollection, IDisposable
         void OnHeight(InputAction.CallbackContext context);
         void OnRoll(InputAction.CallbackContext context);
         void OnReload(InputAction.CallbackContext context);
+        void OnScoreboard(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

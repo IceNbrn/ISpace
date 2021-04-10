@@ -4,6 +4,29 @@ using UnityEngine;
 
 namespace UI.ScoreBoard
 {
+    public readonly struct ScoreRowData
+    {
+        private readonly string _playerName;
+        private readonly int _playerKills;
+        private readonly int _playerAssists;
+        private readonly int _playerDeaths;
+        private readonly int _playerPoints;
+
+        public string PlayerName => _playerName;
+        public int PlayerKills => _playerKills;
+        public int PlayerAssists => _playerAssists;
+        public int PlayerDeaths => _playerDeaths;
+        public int PlayerPoints => _playerPoints;
+
+        public ScoreRowData(string playerName, int playerKills, int playerAssists, int playerDeaths, int playerPoints)
+        {
+            _playerName = playerName;
+            _playerKills = playerKills;
+            _playerAssists = playerAssists;
+            _playerDeaths = playerDeaths;
+            _playerPoints = playerPoints;
+        }
+    }
     public class ScoreRow : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI txtPlayerName;
@@ -12,28 +35,17 @@ namespace UI.ScoreBoard
         [SerializeField] private TextMeshProUGUI txtPlayerDeaths;
         [SerializeField] private TextMeshProUGUI txtPlayerPoints;
 
-        private string _playerName;
-        private int _playerKills;
-        private int _playerAssists;
-        private int _playerDeaths;
-        private int _playerPoints;
+        private ScoreRowData _data;
 
-        public void SetRowData(string name, int kills, int assists, int deaths, int points)
-        {
-            _playerName = name;
-            _playerKills = kills;
-            _playerAssists = assists;
-            _playerDeaths = deaths;
-            _playerPoints = points;
-        }
+        public void SetRowData(ScoreRowData newData) => _data = newData;
 
         private void OnGUI()
         {
-            txtPlayerName.SetText(_playerName);
-            txtPlayerKills.SetText(_playerKills.ToString());
-            txtPlayerAssists.SetText(_playerAssists.ToString());
-            txtPlayerDeaths.SetText(_playerDeaths.ToString());
-            txtPlayerPoints.SetText(_playerPoints.ToString());
+            txtPlayerName.SetText(_data.PlayerName);
+            txtPlayerKills.SetText(_data.PlayerKills.ToString());
+            txtPlayerAssists.SetText(_data.PlayerAssists.ToString());
+            txtPlayerDeaths.SetText(_data.PlayerDeaths.ToString());
+            txtPlayerPoints.SetText(_data.PlayerPoints.ToString());
         }
     }
 }
