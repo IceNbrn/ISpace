@@ -12,12 +12,16 @@ namespace UI
         private float contentHeightOffset;
         [SerializeField]
         private Transform spawnPosition;
+        [SerializeField] 
+        private Transform parent;
+        [SerializeField] 
+        private List<GameObject> listPrefabs;
 
-        public bool IsScrollActive;
+        public bool IsScrollViewActive;
 
         private void OnGUI()
         {
-            if(IsScrollActive)
+            if (IsScrollViewActive)
                 UpdateScrollView();
         }
 
@@ -33,18 +37,19 @@ namespace UI
 
         public GameObject AddContent(GameObject prefab)
         {
-        
-            GameObject instantiatedObject = null;
-            /*if (_objectsSpawned.Count == 0)
-            {
-                instantiatedObject = Instantiate(prefab, spawnPosition.position, Quaternion.identity);
-                _objectsSpawned.Add(instantiatedObject.transform);
-            }
-            else
-            {
-                
-                
-            }*/
+            
+            GameObject instantiatedObject = Instantiate(prefab, spawnPosition.transform.parent, false);
+            RectTransform rectTransform = instantiatedObject.GetComponent<RectTransform>();
+            RectTransform spawnRectTransform = spawnPosition.GetComponent<RectTransform>();
+            Rect rect = spawnRectTransform.rect;
+            Vector3 position = rectTransform.localPosition;
+            
+            rectTransform.sizeDelta = new Vector2(0.0f, rect.height);
+            position.y -= spawnRectTransform.sizeDelta.y * listPrefabs.Count;
+            
+            rectTransform.localPosition = position;
+            listPrefabs.Add(instantiatedObject);
+            
             return instantiatedObject;
         }
     }

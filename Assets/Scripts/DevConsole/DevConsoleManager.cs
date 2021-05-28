@@ -77,7 +77,9 @@ namespace DevConsole
             {
                 ScoreRowData rowData = new ScoreRowData("Player", 1, 2, 3, 4); 
                 ScoreBoardManager.Singleton.AddRow(rowData);
+                Debug.Log("addRow");
             });
+            
             
             CMD_QUIT = new ConsoleCommand("quit", "Quits game", "quit",() =>
             {
@@ -106,34 +108,44 @@ namespace DevConsole
             for (int i = 0; i < _commands.Count; ++i)
             {
                 object command = _commands[i];
-                RunCommand(ref command, inputText, ref args);
+                if (RunCommand(ref command, inputText, ref args))
+                    break;
             }
             input.Select();
             input.ActivateInputField();
+            input.text = String.Empty;
         }
 
-        private void RunCommand(ref object command, string inputText, ref string[] args)
+        private bool RunCommand(ref object command, string inputText, ref string[] args)
         {
             Debug.Log($"Run Command {inputText}");
-            if (command is ConsoleCommandBase commandBase && inputText.Contains(commandBase.CommandId))
+            ConsoleCommandBase commandBase = command as ConsoleCommandBase;
+            if (commandBase != null && inputText.Contains(commandBase.CommandId.ToLower()))
             {
-                if (command is ConsoleCommand)
+                switch (command)
                 {
-                    ((ConsoleCommand)command)?.Invoke();
-                }
-                else if (command is ConsoleCommand<int>)
-                {
-                    int value = int.Parse(args[1]);
-                    ((ConsoleCommand<int>)command)?.Invoke(value);
-                }
-                else if (command is ConsoleCommand<float>)
-                {
-                    string args1 = args[1];
-                    args1 = args1.Replace(".", ",");
-                    float value = float.Parse(args1);
-                    ((ConsoleCommand<float>)command)?.Invoke(value);
+                    case ConsoleCommand consoleCommand:
+                    {
+                        consoleCommand?.Invoke();
+                        return true;
+                    }
+                    case ConsoleCommand<int> consoleCommand:
+                    {
+                        int value = int.Parse(args[1]);
+                        consoleCommand?.Invoke(value);
+                        return true;
+                    }
+                    case ConsoleCommand<float> consoleCommand:
+                    {
+                        string args1 = args[1];
+                        args1 = args1.Replace(".", ",");
+                        float value = float.Parse(args1);
+                        consoleCommand?.Invoke(value);
+                        return true;
+                    }
                 }
             }
+            return false;
         }
 
         private void ToggleConsole()
