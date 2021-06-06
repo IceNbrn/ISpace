@@ -19,14 +19,14 @@ namespace UI.ScoreBoard
         private GameObject table;
 
         private PlayerInActions _controls;
-        private Dictionary<ScoreRowData, Transform> _rows;
-
-        private void Awake()
+        private Dictionary<uint, ScoreRow> _scoreRows;
+        
+        private void Start()
         {
             if (!InitializeSingleton()) 
                 return;
 
-            _rows = new Dictionary<ScoreRowData, Transform>();
+            _scoreRows = new Dictionary<uint, ScoreRow>();
             _controls = PlayerInputs.PlayerControls;
             _controls.Player.Scoreboard.Enable();
             
@@ -53,14 +53,29 @@ namespace UI.ScoreBoard
             return true;
         }
 
-        public void AddRow(ScoreRowData rowData)
+        public void AddRow(uint playerNetId, ScoreRowData rowData)
         {
             GameObject instantiatedObject = scrollViewContent.AddContent(rowPrefab);
             if (instantiatedObject != null)
             {
                 ScoreRow rowInstantiated = instantiatedObject.GetComponent<ScoreRow>();
                 rowInstantiated.SetRowData(rowData);
+
+                if (!_scoreRows.ContainsKey(playerNetId))
+                    _scoreRows.Add(playerNetId, rowInstantiated);
+                else
+                    _scoreRows[playerNetId] = rowInstantiated;
+
             }
+        }
+
+        public bool UpdateRowData(uint playerNetId, ScoreRowData rowData)
+        {
+            if (!_scoreRows.ContainsKey(playerNetId)) 
+                return false;
+            
+            _scoreRows[playerNetId].UpdateRowData(rowData);
+            return true;
         }
         
         private void ScoreboardOnPerformed(bool value)
@@ -68,5 +83,6 @@ namespace UI.ScoreBoard
             IsScoreBoardActive = value;
             table.SetActive(value);
         }
+        
     }
 }

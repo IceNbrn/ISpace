@@ -75,9 +75,7 @@ namespace DevConsole
             
             CMD_ADD_SCORE_ROW = new ConsoleCommand("addScoreRow", "adds score row", "addScoreRow",() =>
             {
-                ScoreRowData rowData = new ScoreRowData("Player", 1, 2, 3, 4); 
-                ScoreBoardManager.Singleton.AddRow(rowData);
-                Debug.Log("addRow");
+                
             });
             
             

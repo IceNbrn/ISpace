@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using Mirror;
 using UI;
+using UI.ScoreBoard;
 using UnityEngine;
 using UnityEngine.Rendering;
 using Weapons;
@@ -62,6 +63,7 @@ namespace Player
         [Header("UI")] 
         [SerializeField] private GameObject playerUI;
         [SerializeField] private GameObject deathScreenUI;
+        [SerializeField] private GameObject scoreboardUI;
         private DeathUIManager _deathUIManager;
         
         // ---------------- Visuals ---------------- 
@@ -85,9 +87,11 @@ namespace Player
             _networkIdentity = GetComponent<NetworkIdentity>();
 
             playerStats.ResetCurrentHealth();
-            
+
+            bool isLocalPlayer = _networkIdentity.isLocalPlayer;
             // Make the player body only visible to other players
-            SetMeshRendersActive(!_networkIdentity.isLocalPlayer);
+            SetMeshRendersActive(!isLocalPlayer);
+            SetUIActive(isLocalPlayer);
         }
 
         public override void OnStartClient()
@@ -215,6 +219,12 @@ namespace Player
             {
                 meshRenderer.shadowCastingMode = value ? ShadowCastingMode.On : ShadowCastingMode.ShadowsOnly;
             }
+        }
+
+        private void SetUIActive(bool active)
+        {
+            playerUI.SetActive(active);
+            //scoreboardUI.SetActive(value);
         }
 
         private void SetPlayerStats(PlayerStats oldStats, PlayerStats newStats)

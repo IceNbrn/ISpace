@@ -3,6 +3,7 @@ using System.Collections;
 using Mirror;
 using Player;
 using TMPro;
+using UI.ScoreBoard;
 using UnityEngine;
 
 namespace Game.Managers
@@ -31,6 +32,7 @@ namespace Game.Managers
             if (!isLocalPlayer) return;
             
             _deadInfo = deadInfo;
+            ScoreBoardManager.Singleton.UpdateRowData(netId, new ScoreRowData(0, 0, 1, -10));
             CmdShowKillFeed();
         }
 
