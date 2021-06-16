@@ -18,4 +18,4 @@ MonoBehaviour:
   MagazineCapacity: 30
   Range: 200
   CoolOffTime: 1
-  RecoilForce: 100
+  RecoilForce: 10
