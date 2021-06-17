@@ -36,7 +36,7 @@ namespace UI
             if (showPing)
                 infoResult += $"[Ping]       : {ping} ms\n";
 
-            int playesOnline = GameManager.PlayersOnline;
+            int playesOnline = GameManager.GetPlayersOnline();
             infoResult += $"[Players] : {playesOnline}/{networkManager.maxConnections}";
             
             textFps.SetText($"[FPS] {_avgFps}");

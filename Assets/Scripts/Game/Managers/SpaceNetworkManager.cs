@@ -34,9 +34,7 @@ public class SpaceNetworkManager : NetworkManager
     {
         base.OnServerAddPlayer(conn);
         Debug.Log($"Player {conn.identity.netId} added!");
-        uint playerNetId = conn.identity.netId;
-        ScoreRowData rowData = new ScoreRowData($"Player {playerNetId}");
-        ScoreBoardManager.Singleton.AddRow(playerNetId, rowData);
+        
     }
 
 }

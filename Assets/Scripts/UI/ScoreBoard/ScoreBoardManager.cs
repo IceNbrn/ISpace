@@ -59,7 +59,7 @@ namespace UI.ScoreBoard
             if (instantiatedObject != null)
             {
                 ScoreRow rowInstantiated = instantiatedObject.GetComponent<ScoreRow>();
-                rowInstantiated.SetRowData(rowData);
+                rowInstantiated.SetData(rowData);
 
                 if (!_scoreRows.ContainsKey(playerNetId))
                     _scoreRows.Add(playerNetId, rowInstantiated);
@@ -68,13 +68,33 @@ namespace UI.ScoreBoard
 
             }
         }
+        
+        public void RemoveRow(uint playerNetId)
+        {
+            Debug.Log("Removing row");
+            if (_scoreRows.ContainsKey(playerNetId))
+            {
+                Destroy(_scoreRows[playerNetId].gameObject);
+                _scoreRows.Remove(playerNetId);
+                Debug.Log("Row removed");
+            }
+        }
 
         public bool UpdateRowData(uint playerNetId, ScoreRowData rowData)
         {
             if (!_scoreRows.ContainsKey(playerNetId)) 
                 return false;
             
-            _scoreRows[playerNetId].UpdateRowData(rowData);
+            _scoreRows[playerNetId].UpdateData(rowData);
+            return true;
+        }
+        
+        public bool SetRowStats(uint playerNetId, Stats stats)
+        {
+            if (!_scoreRows.ContainsKey(playerNetId)) 
+                return false;
+            
+            _scoreRows[playerNetId].SetStats(stats);
             return true;
         }
         
@@ -83,6 +103,7 @@ namespace UI.ScoreBoard
             IsScoreBoardActive = value;
             table.SetActive(value);
         }
+
         
     }
 }

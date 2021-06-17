@@ -16,9 +16,6 @@ namespace Player
         
         private static float _mouseSensitivity;
         
-        // UI
-        [SerializeField] private GameObject _canvasUI;
-        
         private float _rotationX, _rotationY, _rotationZ;
         
         private Rigidbody _rigidbody;
@@ -34,7 +31,6 @@ namespace Player
 
             _mouseSensitivity = GameManager.Singleton.GetPlayerSettings().Sensitivity * 0.1f;
             
-            _canvasUI.SetActive(true);
             _rigidbody = GetComponent<Rigidbody>();
         }
         

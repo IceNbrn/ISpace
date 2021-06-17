@@ -23,16 +23,24 @@ namespace Game.Managers
         
         private void Awake()
         {
+            //SpacePlayer.OnPlayerKills += OnPlayerKills;
+            //if (!isLocalPlayer) return;
             SpacePlayer.OnPlayerDies += OnPlayerDies;
         }
-
+        
+        private void OnPlayerKills(DeathInfo deadInfo)
+        {
+            if (!isLocalPlayer) return;
+            
+            _deadInfo = deadInfo;
+            CmdShowKillFeed();
+        }
         
         private void OnPlayerDies(DeathInfo deadInfo)
         {
             if (!isLocalPlayer) return;
             
             _deadInfo = deadInfo;
-            ScoreBoardManager.Singleton.UpdateRowData(netId, new ScoreRowData(0, 0, 1, -10));
             CmdShowKillFeed();
         }
 

@@ -183,7 +183,7 @@ namespace Weapons
             SpacePlayer player = GameManager.GetPlayer(playerId);
             if (damage >= 0.0f && damage <= weaponInfo.Damage)
             {
-                player.TakeDamage(damage, fromPlayer, weaponInfo.name);
+                bool isPlayerDead = player.TakeDamage(damage, fromPlayer, weaponInfo.name);
                 /*
                 if (!hasAuthority && !isServer)
                     player.TakeDamage(damage, fromPlayer);

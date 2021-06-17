@@ -128,7 +128,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8581746674278168046
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3971,7 +3971,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8758998336197172765
 RectTransform:
   m_ObjectHideFlags: 0
@@ -12649,6 +12649,7 @@ MonoBehaviour:
   - {fileID: 6749501898610084976}
   - {fileID: 3494390369782046459}
   - {fileID: 7923732288052225897}
+  playerCanvas: {fileID: 4601986106787172650}
   playerUI: {fileID: 466000311033902121}
   deathScreenUI: {fileID: 4976804543261326605}
   scoreboardUI: {fileID: 3621578131898711609}

@@ -1,4 +1,5 @@
 using System;
+using Player;
 using TMPro;
 using UnityEngine;
 
@@ -27,6 +28,15 @@ namespace UI.ScoreBoard
             _playerPoints  = playerPoints;
         }
         
+        public ScoreRowData(string playerName, Stats stats)
+        {
+            _playerName    = playerName;
+            _playerKills   = stats.Kills;
+            _playerAssists = stats.Assists;
+            _playerDeaths  = stats.Deaths;
+            _playerPoints  = stats.Points;
+        }
+        
         public ScoreRowData(string playerName)
         {
             _playerName    = playerName;
@@ -43,6 +53,15 @@ namespace UI.ScoreBoard
             _playerAssists = playerAssists;
             _playerDeaths  = playerDeaths;
             _playerPoints  = playerPoints;
+        }
+        
+        public ScoreRowData(Stats stats)
+        {
+            _playerName    = String.Empty;
+            _playerKills   = stats.Kills;
+            _playerAssists = stats.Assists;
+            _playerDeaths  = stats.Deaths;
+            _playerPoints  = stats.Points;
         }
         
         public static ScoreRowData operator +(ScoreRowData a, ScoreRowData b)
@@ -67,8 +86,9 @@ namespace UI.ScoreBoard
 
         private ScoreRowData _data;
 
-        public void SetRowData(ScoreRowData newData) => _data = newData;
-        public void UpdateRowData(ScoreRowData newData) => _data += newData;
+        public void SetData(ScoreRowData newData) => _data = newData;
+        public void SetStats(Stats stats) => _data = new ScoreRowData(_data.PlayerName, stats);
+        public void UpdateData(ScoreRowData newData) => _data += newData;
 
         private void OnGUI()
         {

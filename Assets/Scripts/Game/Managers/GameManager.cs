@@ -7,7 +7,8 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Singleton { get; private set; }
-    public static int PlayersOnline { get; private set; }
+    public static ref Dictionary<string, SpacePlayer> GetPlayers() => ref _players;
+    public static int GetPlayersOnline() => _players.Count;
     
     private const string PLAYER_PREFIX = "Player ";
     private static Dictionary<string, SpacePlayer> _players = new Dictionary<string, SpacePlayer>();
@@ -45,7 +46,7 @@ public class GameManager : MonoBehaviour
 
     public void UpdatePlayersCount()
     {
-        PlayersOnline = FindPlayersByTag("Player");
+        //PlayersOnline = FindPlayersByTag("Player");
     }
     
     public int FindPlayersByTag(string tag)
@@ -54,17 +55,18 @@ public class GameManager : MonoBehaviour
         return players;
     }
 
-    public static void AddPlayer(string netId, SpacePlayer player)
+    public static void AddPlayer(uint netId, SpacePlayer player)
     {
-        string _playerId = PLAYER_PREFIX + netId;
+        string _playerId = PLAYER_PREFIX + netId.ToString();
         _players.Add(_playerId, player);
         player.transform.name = _playerId;
     }
 
-    public static void RemovePlayer(string playerId)
+    public static void RemovePlayer(uint playerId)
     {
-        if(_players.ContainsKey(playerId))
-            _players.Remove(playerId);
+        string playerIdStr = playerId.ToString();
+        if(_players.ContainsKey(playerIdStr))
+            _players.Remove(playerIdStr);
     }
 
     public static SpacePlayer GetPlayer(string playerId) => _players[playerId];
