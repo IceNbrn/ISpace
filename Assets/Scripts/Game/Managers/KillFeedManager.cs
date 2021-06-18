@@ -53,10 +53,22 @@ namespace Game.Managers
         [ClientRpc]
         private void RpcShowKillFeed()
         {
+            /*
             if (_isKillFeedActive)
+            {
                 _currentText = killFeedText.text;
+                _currentWeaponText = killFeedWeaponText.text;
+            }
             else
+            {
                 StartCoroutine(ShowKillFeedCoroutine());
+            }*/
+            if (_isKillFeedActive)
+            {
+                _currentText = killFeedText.text;
+                _currentWeaponText = killFeedWeaponText.text;
+            }
+            StartCoroutine(ShowKillFeedCoroutine());
         }
         
         private IEnumerator ShowKillFeedCoroutine()
@@ -72,9 +84,10 @@ namespace Game.Managers
             }
             
             yield return new WaitForSeconds(killFeedTime);
-            killFeed.SetActive(false);
+            
             _isKillFeedActive = false;
             _deadInfo = null;
+            killFeed.SetActive(false);
         }
     }
 }

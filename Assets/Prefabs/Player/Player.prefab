@@ -3400,7 +3400,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &4292203471877544154
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3421,7 +3421,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 38.059998, y: 20}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 1, y: 1}
 --- !u!222 &2998849899716686781
 CanvasRenderer:
@@ -3664,9 +3664,9 @@ RectTransform:
   m_Father: {fileID: 4292203471877544154}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 28.059998, y: -10}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4026737339585182531
@@ -3971,7 +3971,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &8758998336197172765
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4089,9 +4089,9 @@ RectTransform:
   m_Father: {fileID: 4292203471877544154}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 10, y: -10}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8630974098640358492
@@ -12604,7 +12604,6 @@ MonoBehaviour:
   _rollSpeed: 40
   _heightSpeed: 8
   _dragColliding: 10000
-  _canvasUI: {fileID: 4601986106787172650}
 --- !u!114 &6458375402634000901
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12643,7 +12642,7 @@ MonoBehaviour:
   playerStats: {fileID: -4835516275306546506}
   canRespawn: 1
   timeToRespawn: 3
-  weapon: {fileID: 0}
+  weapon: {fileID: 6458375402634000901}
   cameraTransform: {fileID: 8844552308825784693}
   colliders:
   - {fileID: 6749501898610084976}
@@ -12675,7 +12674,9 @@ MonoBehaviour:
   syncInterval: 0.1
   Health: 100
   Kills: 0
+  Assists: 0
   Deaths: 0
+  Points: 0
   KillRatio: 0
   KilledByPlayer: 
   KilledByWeapon: 
@@ -13672,9 +13673,9 @@ RectTransform:
   m_Father: {fileID: 4292203471877544154}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 19.029999, y: -10}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2319137206791247313

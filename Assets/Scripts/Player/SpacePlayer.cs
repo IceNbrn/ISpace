@@ -43,14 +43,14 @@ namespace Player
 
         // ---------------- Respawn ----------------  
         [Header("Respawn")]
-        [SerializeField]
-        private bool canRespawn;
-        
-        [SerializeField] 
-        private float timeToRespawn = 3.0f;
-        
+        [SerializeField] private bool canRespawn;
+        [SerializeField] private float timeToRespawn = 3.0f;
+        [SerializeField] private float timeToTeleport = 0.2f;
+        [SerializeField] private float spawnProtectionTime = 3.0f;
+
         private Vector3 _respawnPoint;
         private bool _respawning;
+        private bool _spawnProtected;
         
         // ---------------- Systems ---------------- 
         [Header("Systems")]
@@ -108,6 +108,7 @@ namespace Player
             GameManager.AddPlayer(netId, player);
             
             if (!isLocalPlayer) return;
+            weapon.OnWeaponFire += OnPlayerWeaponFire;
             CmdUpdateScoreRow(true, netId);
             UpdateScoreBoard();
         }
@@ -164,11 +165,17 @@ namespace Player
         [Server]
         public bool TakeDamage(float damage, string fromPlayer, string weaponName)
         {
-            Debug.Log($"(CMD)Taking Damage: {damage} from {fromPlayer}");
+            if (_spawnProtected)
+            {
+                Debug.Log($"(CMD) PlayerProtected");
+                return false;
+            }
+                
+            Debug.Log($"(CMD) Taking Damage: {damage} from {fromPlayer}");
             playerStats.CurrentHealth -= damage;
 
             bool isPlayerDead = playerStats.CurrentHealth <= 0.0f && canRespawn && !_respawning;
-
+            
             if (isPlayerDead)
             {
                 Debug.Log("Calling RPCRespawn");
@@ -190,10 +197,26 @@ namespace Player
             _deathUIManager.SetKilledTextEmpty();
             
             ChangePlayerPosition();
+            // We wait so we give time to change the player position
+            // With that the others players don't see a player teleporting
+            yield return new WaitForSeconds(timeToTeleport);
             SetPlayerStatus(EPlayerStatus.ALIVE);
 
             playerStats.ResetCurrentHealth();
             _respawning = false;
+        }
+        
+        private IEnumerator SpawnProtectionCoroutine()
+        {
+            _spawnProtected = true;
+            yield return new WaitForSeconds(spawnProtectionTime);
+            _spawnProtected = false;
+        }
+        
+        private void OnPlayerWeaponFire()
+        {
+            StopCoroutine(SpawnProtectionCoroutine());
+            _spawnProtected = false;
         }
 
         private void SetPlayerStatus(EPlayerStatus status)
@@ -215,6 +238,10 @@ namespace Player
                     // UI
                     deathScreenUI.SetActive(false);
                     playerUI.SetActive(true);
+                    
+                    // Systems
+                    StartCoroutine(SpawnProtectionCoroutine());
+                    weapon.SetWeaponActive(true);
                     break;
                 case EPlayerStatus.DEAD:
                     // Colliders
@@ -227,6 +254,9 @@ namespace Player
                     // UI
                     playerUI.SetActive(false);
                     deathScreenUI.SetActive(true);
+                    
+                    // Systems
+                    weapon.SetWeaponActive(false);
                     break;
                 case EPlayerStatus.SPECTATING:
                     // Colliders
