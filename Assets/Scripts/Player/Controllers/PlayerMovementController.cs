@@ -8,11 +8,13 @@ namespace Player
     {
         // Speeds
         [Header("Speeds Settings")]
-        [SerializeField] private float _moveSpeed      = 15f;
+        [SerializeField] private float _moveSpeed      = 8f;
         [SerializeField] private float _rollSpeed      = 40f;
         [SerializeField] private float _heightSpeed    = 8f;
         //[SerializeField] private float _drag           = 2f;
-        [SerializeField] private float _dragColliding  = 100f;
+        [SerializeField] private float _dragColliding  = 10000f;
+        [SerializeField] private Vector3 mapCenter;
+        [SerializeField] private float maxDistance = 5000.0f;
         
         private static float _mouseSensitivity;
         
@@ -69,6 +71,7 @@ namespace Player
             if (!isLocalPlayer)
                 return;
             
+            CmdLimitArea();
             ControlVelocity();
         }
 
@@ -153,6 +156,24 @@ namespace Player
             //_rigidbody.freezeRotation = false;
         }
 
+        [Command]
+        private void CmdLimitArea()
+        {
+            LimitArea();
+        }
+        
+        [Server]
+        private void LimitArea()
+        {
+            Vector3 playerPosition = transform.position;
+            Vector3 distanceToCenter = playerPosition - mapCenter;
+            if (distanceToCenter.sqrMagnitude > maxDistance)
+            {
+                Vector3 forceVector = distanceToCenter * (distanceToCenter.sqrMagnitude / 1000.0f);
+                _rigidbody.AddForce(-forceVector, ForceMode.Force);
+            }
+        }
+        
         public static void SetSensitivity(float value) => _mouseSensitivity = value;
     }
 }

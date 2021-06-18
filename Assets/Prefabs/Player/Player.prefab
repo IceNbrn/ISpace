@@ -12604,6 +12604,8 @@ MonoBehaviour:
   _rollSpeed: 40
   _heightSpeed: 8
   _dragColliding: 10000
+  mapCenter: {x: -11.012, y: 2.75, z: 4.799}
+  maxDistance: 5000
 --- !u!114 &6458375402634000901
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12642,6 +12644,8 @@ MonoBehaviour:
   playerStats: {fileID: -4835516275306546506}
   canRespawn: 1
   timeToRespawn: 3
+  timeToTeleport: 0.2
+  spawnProtectionTime: 3
   weapon: {fileID: 6458375402634000901}
   cameraTransform: {fileID: 8844552308825784693}
   colliders:
