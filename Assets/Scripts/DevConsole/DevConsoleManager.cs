@@ -29,6 +29,9 @@ namespace DevConsole
         public static ConsoleCommand CMD_HELP;
         public static ConsoleCommand<float> CMD_PLAYER_SENSITIVITY;
         public static ConsoleCommand CMD_ADD_SCORE_ROW;
+        public static ConsoleCommand<float> CMD_CROSSHAIR_THICKNESS;
+        public static ConsoleCommand<float> CMD_CROSSHAIR_HEIGHT;
+        public static ConsoleCommand<float> CMD_CROSSHAIR_GAP;
         public static ConsoleCommand CMD_QUIT;
         
         private void Awake()
@@ -78,6 +81,11 @@ namespace DevConsole
                 
             });
             
+            CMD_CROSSHAIR_THICKNESS = new ConsoleCommand<float>("crosshair_thickness", "Sets the player crosshair thickness", "crosshair_thickness <value>",(value) =>
+            {
+                CrosshairSettings crosshairSettings = new CrosshairSettings() {Thickness = value};
+                GameManager.Singleton.UpdateCrosshair(crosshairSettings);
+            });
             
             CMD_QUIT = new ConsoleCommand("quit", "Quits game", "quit",() =>
             {
@@ -93,6 +101,9 @@ namespace DevConsole
                 CMD_HELP,
                 CMD_PLAYER_SENSITIVITY,
                 CMD_ADD_SCORE_ROW,
+                CMD_CROSSHAIR_THICKNESS,
+                CMD_CROSSHAIR_HEIGHT,
+                CMD_CROSSHAIR_GAP,
                 CMD_QUIT
             };
         }

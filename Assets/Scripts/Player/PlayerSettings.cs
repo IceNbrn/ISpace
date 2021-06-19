@@ -8,5 +8,6 @@ namespace Player
         public float Sensitivity;
         public CrosshairSettings CrosshairSettings;
 
+        public Action OnCrosshairUpdated;
     }
 }

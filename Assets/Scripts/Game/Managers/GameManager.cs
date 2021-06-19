@@ -79,4 +79,10 @@ public class GameManager : MonoBehaviour
     }
 
     public ref PlayerSettings GetPlayerSettings() => ref PlayerSettings;
+
+    public void UpdateCrosshair(CrosshairSettings crosshairSettings)
+    {
+        PlayerSettings.CrosshairSettings = crosshairSettings;
+        PlayerSettings.OnCrosshairUpdated.Invoke();
+    }
 }

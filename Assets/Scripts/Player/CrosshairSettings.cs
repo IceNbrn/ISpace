@@ -7,5 +7,6 @@ namespace Player
     {
         public float Gap;
         public float Thickness;
+        public float Height;
     }
 }
