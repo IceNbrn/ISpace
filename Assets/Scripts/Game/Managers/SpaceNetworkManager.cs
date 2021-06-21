@@ -2,6 +2,7 @@ using System;
 using Mirror;
 using UI.ScoreBoard;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SpaceNetworkManager : NetworkManager
 {
@@ -27,7 +28,8 @@ public class SpaceNetworkManager : NetworkManager
     public override void OnStopClient()
     {
         base.OnStopClient();
-        Debug.Log("StopServer");
+        //SceneManager.LoadSceneAsync(0);
+        Debug.Log("StopClient");
     }
     
     public override void OnServerAddPlayer(NetworkConnection conn)

@@ -28,12 +28,12 @@ namespace Player
 
         private void Start()
         {
+            _rigidbody = GetComponent<Rigidbody>();
+            
             if (!isLocalPlayer)
                 return;
-
-            _mouseSensitivity = GameManager.Singleton.PlayerSettings.Sensitivity * 0.1f;
             
-            _rigidbody = GetComponent<Rigidbody>();
+            _mouseSensitivity = GameManager.Singleton.PlayerSettings.Sensitivity * 0.1f;
         }
         
         private void OnEnable()
@@ -162,9 +162,10 @@ namespace Player
             LimitArea();
         }
         
-        [Server]
+        [ClientRpc]
         private void LimitArea()
         {
+            Debug.Log($"LimitArea - Object: {gameObject.name}");
             Vector3 playerPosition = transform.position;
             Vector3 distanceToCenter = playerPosition - mapCenter;
             if (distanceToCenter.sqrMagnitude > maxDistance)

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Mirror;
 using Player;
+using SaveSystem;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -15,7 +16,7 @@ public class GameManager : MonoBehaviour
     
     [SerializeField] 
     public PlayerSettings PlayerSettings;
-
+    
     // Start is called before the first frame update
     void Awake()
     {
@@ -24,6 +25,20 @@ public class GameManager : MonoBehaviour
         
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = -1;
+
+        LoadPlayerSettings();
+        
+        PlayerSettings.OnSettingsUpdated += OnSettingsUpdated;
+    }
+
+    private void LoadPlayerSettings()
+    {
+        PlayerSettings = SaveDataManager.LoadPlayerJson() ?? PlayerSettings;
+    }
+
+    private void OnSettingsUpdated()
+    {
+        SaveDataManager.SavePlayerJson(PlayerSettings);
     }
 
     private bool InitializeSingleton()
@@ -83,6 +98,7 @@ public class GameManager : MonoBehaviour
     public void UpdateCrosshair(CrosshairSettings crosshairSettings)
     {
         PlayerSettings.CrosshairSettings.Override(crosshairSettings);
+        PlayerSettings.OnSettingsUpdated.Invoke();
         PlayerSettings.OnCrosshairUpdated.Invoke();
     }
 }

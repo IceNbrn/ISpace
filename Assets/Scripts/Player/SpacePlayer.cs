@@ -123,7 +123,7 @@ namespace Player
             GameManager.RemovePlayer(netId);
             if (!isLocalPlayer) return;
             
-            CmdUpdateScoreRow(false, netId);
+            // TODO: remove the scorerow when the player leaves
         }
         
         // Checks if the server has more than 1 player, if so, adds the respective score rows
