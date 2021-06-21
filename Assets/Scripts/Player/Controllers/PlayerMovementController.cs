@@ -31,7 +31,7 @@ namespace Player
             if (!isLocalPlayer)
                 return;
 
-            _mouseSensitivity = GameManager.Singleton.GetPlayerSettings().Sensitivity * 0.1f;
+            _mouseSensitivity = GameManager.Singleton.PlayerSettings.Sensitivity * 0.1f;
             
             _rigidbody = GetComponent<Rigidbody>();
         }

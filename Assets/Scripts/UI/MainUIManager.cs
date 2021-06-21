@@ -60,7 +60,7 @@ namespace UI
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
 #else
-            Application.Quit();
+            Application.Quit(0);
 #endif
         }
 
@@ -73,7 +73,7 @@ namespace UI
         public void JoinBtn(GameObject toolTip = null)
         {
             DisableToolTip(toolTip);
-
+            
             string ip = ipAddressInput.text;
             //networkManager.networkAddress = "192.168.1.195";
             networkManager.networkAddress = ip;

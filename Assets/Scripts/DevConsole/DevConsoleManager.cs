@@ -14,6 +14,7 @@ namespace DevConsole
     {
         public static DevConsoleManager Singleton { get; private set; }
 
+        private GameManager _gameManager;
         private PlayerInActions _controls;
         
         // UI
@@ -30,8 +31,10 @@ namespace DevConsole
         public static ConsoleCommand<float> CMD_PLAYER_SENSITIVITY;
         public static ConsoleCommand CMD_ADD_SCORE_ROW;
         public static ConsoleCommand<float> CMD_CROSSHAIR_THICKNESS;
-        public static ConsoleCommand<float> CMD_CROSSHAIR_HEIGHT;
+        public static ConsoleCommand<float> CMD_CROSSHAIR_SIZE;
         public static ConsoleCommand<float> CMD_CROSSHAIR_GAP;
+        public static ConsoleCommand<int> CMD_CROSSHAIR_TYPE;
+        public static ConsoleCommand<string> CMD_CROSSHAIR_COLOR;
         public static ConsoleCommand CMD_QUIT;
         
         private void Awake()
@@ -45,7 +48,12 @@ namespace DevConsole
             
             InitializeCommands();
         }
-        
+
+        private void Start()
+        {
+            _gameManager = GameManager.Singleton;
+        }
+
         private bool InitializeSingleton()
         {
             if (Singleton != null && Singleton == this) 
@@ -73,7 +81,7 @@ namespace DevConsole
             
             CMD_PLAYER_SENSITIVITY = new ConsoleCommand<float>("sensitivity", "Sets the player mouse sensitivity", "sensitivity <value>",(value) =>
             {
-                GameManager.Singleton.SetSensitivity(value);
+                _gameManager.SetSensitivity(value);
             });
             
             CMD_ADD_SCORE_ROW = new ConsoleCommand("addScoreRow", "adds score row", "addScoreRow",() =>
@@ -84,7 +92,38 @@ namespace DevConsole
             CMD_CROSSHAIR_THICKNESS = new ConsoleCommand<float>("crosshair_thickness", "Sets the player crosshair thickness", "crosshair_thickness <value>",(value) =>
             {
                 CrosshairSettings crosshairSettings = new CrosshairSettings() {Thickness = value};
-                GameManager.Singleton.UpdateCrosshair(crosshairSettings);
+                _gameManager.UpdateCrosshair(crosshairSettings);
+            });
+            
+            CMD_CROSSHAIR_GAP = new ConsoleCommand<float>("crosshair_gap", "Sets the player crosshair gap", "crosshair_gap <value>",(value) =>
+            {
+                CrosshairSettings crosshairSettings = new CrosshairSettings() {Gap = value};
+                _gameManager.UpdateCrosshair(crosshairSettings);
+            });
+            
+            CMD_CROSSHAIR_SIZE = new ConsoleCommand<float>("crosshair_size", "Sets the player crosshair size", "crosshair_size <value>",(value) =>
+            {
+                CrosshairSettings crosshairSettings = new CrosshairSettings() {Size = value};
+                _gameManager.UpdateCrosshair(crosshairSettings);
+            });
+            
+            CMD_CROSSHAIR_TYPE = new ConsoleCommand<int>("crosshair_type", "Sets the player crosshair type", "crosshair_type <value>",(value) =>
+            {
+                CrosshairSettings crosshairSettings = new CrosshairSettings() {Type = (ECrosshairType) value};
+                _gameManager.UpdateCrosshair(crosshairSettings);
+            });
+            
+            CMD_CROSSHAIR_COLOR = new ConsoleCommand<string>("crosshair_color", "Sets the player crosshair color", "crosshair_color <r/g/b>",(value) =>
+            {
+                // CMD-> crosshair_color 1.0/1.0/1.0
+                string[] values = value.Split('/');
+                for (int i = 0; i < 3; i++)
+                    values[i] = values[i].Replace('.', ',');
+                
+                Color color = new Color(float.Parse(values[0]), float.Parse(values[1]), float.Parse(values[2]));
+                
+                CrosshairSettings crosshairSettings = new CrosshairSettings() {Color = color};
+                _gameManager.UpdateCrosshair(crosshairSettings);
             });
             
             CMD_QUIT = new ConsoleCommand("quit", "Quits game", "quit",() =>
@@ -92,7 +131,7 @@ namespace DevConsole
 #if UNITY_EDITOR
                 UnityEditor.EditorApplication.isPlaying = false;
 #else
-                Application.Quit();
+                Application.Quit(0);
 #endif
             });
             
@@ -102,8 +141,10 @@ namespace DevConsole
                 CMD_PLAYER_SENSITIVITY,
                 CMD_ADD_SCORE_ROW,
                 CMD_CROSSHAIR_THICKNESS,
-                CMD_CROSSHAIR_HEIGHT,
+                CMD_CROSSHAIR_SIZE,
                 CMD_CROSSHAIR_GAP,
+                CMD_CROSSHAIR_TYPE,
+                CMD_CROSSHAIR_COLOR,
                 CMD_QUIT
             };
         }
@@ -149,6 +190,12 @@ namespace DevConsole
                         string args1 = args[1];
                         args1 = args1.Replace(".", ",");
                         float value = float.Parse(args1);
+                        consoleCommand?.Invoke(value);
+                        return true;
+                    }
+                    case ConsoleCommand<string> consoleCommand:
+                    {
+                        string value = args[1];
                         consoleCommand?.Invoke(value);
                         return true;
                     }

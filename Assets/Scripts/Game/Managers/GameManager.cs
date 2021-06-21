@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     private static Dictionary<string, SpacePlayer> _players = new Dictionary<string, SpacePlayer>();
     
     [SerializeField] 
-    private PlayerSettings PlayerSettings;
+    public PlayerSettings PlayerSettings;
 
     // Start is called before the first frame update
     void Awake()
@@ -78,11 +78,11 @@ public class GameManager : MonoBehaviour
         PlayerMovementController.SetSensitivity(value);
     }
 
-    public ref PlayerSettings GetPlayerSettings() => ref PlayerSettings;
+    //public ref PlayerSettings PlayerSettings => ref PlayerSettings;
 
     public void UpdateCrosshair(CrosshairSettings crosshairSettings)
     {
-        PlayerSettings.CrosshairSettings = crosshairSettings;
+        PlayerSettings.CrosshairSettings.Override(crosshairSettings);
         PlayerSettings.OnCrosshairUpdated.Invoke();
     }
 }
