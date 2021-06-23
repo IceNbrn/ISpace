@@ -13,6 +13,7 @@ namespace Player
         [SerializeField] private float _heightSpeed    = 8f;
         //[SerializeField] private float _drag           = 2f;
         [SerializeField] private float _dragColliding  = 10000f;
+        [SerializeField] private float dragLerpTime = 0.8f;
         [SerializeField] private Vector3 mapCenter;
         [SerializeField] private float maxDistance = 5000.0f;
         
@@ -152,8 +153,11 @@ namespace Player
         {
             if (!isLocalPlayer)
                 return;
-            _rigidbody.angularDrag = 1f;
+            
             //_rigidbody.freezeRotation = false;
+            _rigidbody.angularVelocity -= Vector3.Lerp(_rigidbody.angularVelocity, Vector3.zero, dragLerpTime);
+            //_rigidbody.angularDrag = 1f;
+            
         }
 
         [Command]
