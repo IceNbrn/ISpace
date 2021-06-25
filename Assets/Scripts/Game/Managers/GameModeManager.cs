@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
+using System.Linq;
 using Mirror;
+using Player;
 using UnityEngine;
 
 namespace Game.Managers
@@ -10,6 +12,7 @@ namespace Game.Managers
         [SerializeField]
         private GameMode gameMode;
 
+        public static bool RespawnEnabled;
         public static Action<GameRound> OnGameRoundEnd;
         
         private string _gameModeName;
@@ -19,6 +22,7 @@ namespace Game.Managers
             _gameModeName = gameMode.name;
             Debug.Log($"GameMode Loaded: {_gameModeName}");
             gameMode.LoadGameMode();
+            RespawnEnabled = gameMode.RoundRespawnEnabled;
 
             if(isServer)
                 StartCoroutine(StartGameMode());
@@ -32,20 +36,35 @@ namespace Game.Managers
             {
                 GameRound indexRound = gameRounds[i];
                 Debug.Log($"GameRound Started: {indexRound.Index}");
+                
                 yield return new WaitForSeconds(indexRound.Time);
                 //OnGameRoundEnd.Invoke(indexRound);
+                
                 RpcRoundEnded();
-                
-                
+                RpcRespawnPlayers();
             }
 
             yield return null;
         }
 
         [ClientRpc]
+        private void RpcRespawnPlayers()
+        {
+            SpacePlayer[] players = GameManager.GetPlayers().Values.ToArray();
+            for (int i = 0; i < players.Length; ++i)
+            {
+                SpacePlayer spacePlayer = players[i];
+                StartCoroutine(spacePlayer.RespawnCoroutine(false));
+            }
+        }
+
+        [ClientRpc]
         private void RpcRoundEnded()
         {
-            Debug.Log($"GameRound Ended");
+             
+            Debug.Log($"RPC GameRound Ended");
         }
+        
+        
     }
 }

@@ -7,10 +7,13 @@ namespace Game
     [Serializable]
     public abstract class GameMode : ScriptableObject
     {
-        [SerializeField] private GameRound[] rounds;
-        [SerializeField] private float roundTime;
-        [SerializeField] private ushort maxTeams;
-        [SerializeField] private ushort maxPlayersPerTeam;
+        [SerializeField] protected GameRound[] rounds;
+        [SerializeField] protected float roundTime;
+        [SerializeField] protected bool roundRespawnEnabled;
+        [SerializeField] protected ushort maxTeams;
+        [SerializeField] protected ushort maxPlayersPerTeam;
+
+        public bool RoundRespawnEnabled => roundRespawnEnabled;
 
         public ref GameRound[] GetRounds() => ref rounds; 
         
@@ -20,7 +23,7 @@ namespace Game
         {
             for (ushort i = 0; i < rounds.Length; ++i)
             {
-                rounds[i] = new GameRound(i, roundTime);
+                rounds[i] = new GameRound(i, roundTime, roundRespawnEnabled);
             }
         }
 

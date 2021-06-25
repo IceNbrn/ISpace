@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Game.Managers;
 using Mirror;
 using UI;
 using UI.ScoreBoard;
@@ -159,7 +160,7 @@ namespace Player
             ScoreBoardManager.Singleton.SetRowStats(playerKiller.netId, playerKillerStats.GetStats());
             ScoreBoardManager.Singleton.SetRowStats(netId, playerStats.GetStats());
             
-            StartCoroutine(RespawnCoroutine());
+            StartCoroutine(RespawnCoroutine(true));
         }
         
         [Server]
@@ -185,18 +186,33 @@ namespace Player
             return isPlayerDead;
         }
 
-        private IEnumerator RespawnCoroutine()
+        public IEnumerator RespawnCoroutine(bool wasKilled)
         {
             _respawning = true;
-            
-            SetPlayerStatus(EPlayerStatus.DEAD);
-            _deathUIManager.SetTextKilledBy(playerStats.KilledByPlayer, playerStats.KilledByWeapon);
-            
+
+            if (wasKilled)
+            {
+                SetPlayerStatus(EPlayerStatus.DEAD);
+                _deathUIManager.SetTextKilledBy(playerStats.KilledByPlayer, playerStats.KilledByWeapon);
+
+                if (!GameModeManager.RespawnEnabled)
+                {
+                    SetPlayerStatus(EPlayerStatus.SPECTATING);
+                    
+                    yield return new WaitForSeconds(timeToRespawn);
+                    _deathUIManager.SetKilledTextEmpty();
+                    _respawning = false;
+                    yield break;
+                }
+            }
+                
             yield return new WaitForSeconds(timeToRespawn);
             
-            _deathUIManager.SetKilledTextEmpty();
+            if (wasKilled)
+                _deathUIManager.SetKilledTextEmpty();
             
             ChangePlayerPosition();
+            
             // We wait so we give time to change the player position
             // With that the others players don't see a player teleporting
             yield return new WaitForSeconds(timeToTeleport);
@@ -265,6 +281,8 @@ namespace Player
                     // Models
                     bodyModel.SetActive(false);
                     weaponModel.SetActive(false);
+                    
+                    // TODO: Activate spectator UI
                     break;
                 default:
                     break;
