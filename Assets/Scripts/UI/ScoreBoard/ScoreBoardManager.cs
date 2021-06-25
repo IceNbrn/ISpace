@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -104,6 +105,16 @@ namespace UI.ScoreBoard
             table.SetActive(value);
         }
 
-        
+        public uint GetPlayerBestScore()
+        {
+            int kills = 0;
+            foreach (KeyValuePair<uint, ScoreRow> scoreRow in _scoreRows.OrderByDescending(key => key.Value.GetStats().PlayerKills))
+            {
+                Debug.Log($"KEY {scoreRow.Key} VALUE {scoreRow.Value.GetStats().ToString()}");
+                return scoreRow.Key;
+            }
+
+            return 0;
+        }
     }
 }

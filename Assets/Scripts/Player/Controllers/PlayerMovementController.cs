@@ -163,20 +163,24 @@ namespace Player
         [Command]
         private void CmdLimitArea()
         {
-            LimitArea();
-        }
-        
-        [ClientRpc]
-        private void LimitArea()
-        {
             Debug.Log($"LimitArea - Object: {gameObject.name}");
             Vector3 playerPosition = transform.position;
             Vector3 distanceToCenter = playerPosition - mapCenter;
             if (distanceToCenter.sqrMagnitude > maxDistance)
             {
                 Vector3 forceVector = distanceToCenter * (distanceToCenter.sqrMagnitude / 1000.0f);
-                _rigidbody.AddForce(-forceVector, ForceMode.Force);
+                Debug.Log($"CMD Negative ForceVector {-forceVector}");
+                RpcLimitArea(forceVector);
             }
+        }
+        
+        [ClientRpc]
+        private void RpcLimitArea(Vector3 forceVector)
+        {
+            if (!isLocalPlayer)
+                return;
+            Debug.Log($"RPC Negative ForceVector {-forceVector}");
+            _rigidbody.AddForce(-forceVector, ForceMode.Force);
         }
         
         public static void SetSensitivity(float value) => _mouseSensitivity = value;

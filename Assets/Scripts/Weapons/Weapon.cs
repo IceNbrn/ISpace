@@ -199,11 +199,6 @@ namespace Weapons
             if (damage >= 0.0f && damage <= weaponInfo.Damage)
             {
                 bool isPlayerDead = player.TakeDamage(damage, fromPlayer, weaponInfo.name);
-                /*
-                if (!hasAuthority && !isServer)
-                    player.TakeDamage(damage, fromPlayer);
-                else
-                    player.RpcTakeDamage(damage, fromPlayer);*/
             }
         }
 

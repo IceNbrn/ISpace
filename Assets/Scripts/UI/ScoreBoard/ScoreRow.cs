@@ -75,6 +75,11 @@ namespace UI.ScoreBoard
             ScoreRowData scoreRowData = new ScoreRowData(playerName, playerKills, playerAssists, playerDeaths, playerPoints);
             return scoreRowData;
         }
+
+        public override string ToString()
+        {
+            return $"{_playerName}, {_playerKills}, {_playerAssists}, {_playerDeaths}, {_playerPoints}";
+        }
     }
     public class ScoreRow : MonoBehaviour
     {
@@ -89,6 +94,8 @@ namespace UI.ScoreBoard
         public void SetData(ScoreRowData newData) => _data = newData;
         public void SetStats(Stats stats) => _data = new ScoreRowData(_data.PlayerName, stats);
         public void UpdateData(ScoreRowData newData) => _data += newData;
+
+        public ScoreRowData GetStats() => _data;
 
         private void OnGUI()
         {
