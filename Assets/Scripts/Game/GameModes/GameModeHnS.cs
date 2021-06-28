@@ -15,5 +15,10 @@ namespace Game.GameModes
         {
             throw new NotImplementedException();
         }
+
+        public override GameTeam GetWinner()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

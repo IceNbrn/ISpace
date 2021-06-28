@@ -11,6 +11,17 @@ namespace Player
         public int Deaths;
         public int Points;
         public float KillRatio;
+        
+        public Stats () {}
+
+        public Stats(int kills, int assists, int deaths, int points)
+        {
+            Kills = kills;
+            Assists = assists;
+            Deaths = deaths;
+            Points = points;
+            KillRatio = deaths > 0 ? kills / deaths : kills;
+        }
     }
     public class PlayerStats : NetworkBehaviour
     {

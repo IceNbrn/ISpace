@@ -204,12 +204,11 @@ namespace Player
                     _respawning = false;
                     yield break;
                 }
-            }
+
+                yield return new WaitForSeconds(timeToRespawn);
                 
-            yield return new WaitForSeconds(timeToRespawn);
-            
-            if (wasKilled)
                 _deathUIManager.SetKilledTextEmpty();
+            }
             
             ChangePlayerPosition();
             

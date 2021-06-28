@@ -105,16 +105,16 @@ namespace UI.ScoreBoard
             table.SetActive(value);
         }
 
-        public uint GetPlayerBestScore()
+        public KeyValuePair<uint, ScoreRow>? GetPlayerBestScore()
         {
             int kills = 0;
             foreach (KeyValuePair<uint, ScoreRow> scoreRow in _scoreRows.OrderByDescending(key => key.Value.GetStats().PlayerKills))
             {
                 Debug.Log($"KEY {scoreRow.Key} VALUE {scoreRow.Value.GetStats().ToString()}");
-                return scoreRow.Key;
+                return scoreRow;
             }
 
-            return 0;
+            return null;
         }
     }
 }

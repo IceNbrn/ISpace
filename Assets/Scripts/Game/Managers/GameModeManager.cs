@@ -3,14 +3,15 @@ using System.Collections;
 using System.Linq;
 using Mirror;
 using Player;
+using UI;
 using UnityEngine;
 
 namespace Game.Managers
 {
     public class GameModeManager : NetworkBehaviour
     {
-        [SerializeField]
-        private GameMode gameMode;
+        [SerializeField] private GameMode gameMode;
+        [SerializeField] protected float matchLoadTime;
 
         public static bool RespawnEnabled;
         public static Action<GameRound> OnGameRoundEnd;
@@ -27,6 +28,12 @@ namespace Game.Managers
             if(isServer)
                 StartCoroutine(StartGameMode());
         }
+        
+        private void GameMatchEnd()
+        {
+            if(isServer)
+                StartCoroutine(StartGameMode());
+        }
 
         [Server]
         private IEnumerator StartGameMode()
@@ -34,6 +41,7 @@ namespace Game.Managers
             GameRound[] gameRounds = gameMode.GetRounds();
             for (int i = 0; i < gameRounds.Length; i++)
             {
+                RpcRespawnPlayers();
                 GameRound indexRound = gameRounds[i];
                 Debug.Log($"GameRound Started: {indexRound.Index}");
                 
@@ -41,9 +49,10 @@ namespace Game.Managers
                 //OnGameRoundEnd.Invoke(indexRound);
                 
                 RpcRoundEnded();
-                RpcRespawnPlayers();
+                yield return new WaitForSeconds(gameMode.RoundEndTime);
             }
-
+            yield return new WaitForSeconds(matchLoadTime);
+            GameMatchEnd();
             yield return null;
         }
 
@@ -54,15 +63,18 @@ namespace Game.Managers
             for (int i = 0; i < players.Length; ++i)
             {
                 SpacePlayer spacePlayer = players[i];
-                StartCoroutine(spacePlayer.RespawnCoroutine(false));
+                if (spacePlayer != null)
+                    StartCoroutine(spacePlayer.RespawnCoroutine(false));
+                else
+                    Debug.Log("[GameModeManager]: Trying to spawn a player that is not in-game");
             }
         }
 
         [ClientRpc]
         private void RpcRoundEnded()
         {
-             
-            Debug.Log($"RPC GameRound Ended");
+            RoundUIManager.Instance.SetWinnerText(gameMode.GetWinner().GetPlayers(), gameMode.GetWinner().GetScore());
+            Debug.Log($"RPC GameRound Ended | Winner: {gameMode.GetWinner().ToString()}");
         }
         
         

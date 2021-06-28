@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rounds: []
   roundTime: 20
-  roundRespawnEnabled: 0
+  roundEndTime: 2
+  roundRespawnEnabled: 1
   maxTeams: 0
   maxPlayersPerTeam: 0

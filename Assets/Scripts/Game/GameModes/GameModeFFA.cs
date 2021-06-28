@@ -1,4 +1,8 @@
 using System;
+using System.Collections.Generic;
+using Mirror;
+using Player;
+using UI.ScoreBoard;
 using UnityEngine;
 
 namespace Game.GameModes
@@ -15,6 +19,21 @@ namespace Game.GameModes
         protected override bool GameModeEnded()
         {
             throw new NotImplementedException();
+        }
+
+        public override GameTeam GetWinner()
+        {
+            KeyValuePair<uint, ScoreRow>? bestScore = ScoreBoardManager.Singleton.GetPlayerBestScore();
+            if (!bestScore.HasValue) return null;
+            
+            ScoreRowData scoreRowStats = bestScore.Value.Value.GetStats();
+            Stats stats = new Stats(scoreRowStats.PlayerKills, scoreRowStats.PlayerAssists,scoreRowStats.PlayerKills,scoreRowStats.PlayerPoints);
+            NetworkIdentity bestPlayer = NetworkIdentity.spawned[bestScore.Value.Key];
+
+            Dictionary<NetworkIdentity, Stats> playerScore = new Dictionary<NetworkIdentity, Stats>(){ {bestPlayer, stats } };
+            GameTeam gameTeam = new GameTeam(playerScore);
+            return gameTeam;
+
         }
     }
 }

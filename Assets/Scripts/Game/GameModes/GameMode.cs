@@ -9,12 +9,13 @@ namespace Game
     {
         [SerializeField] protected GameRound[] rounds;
         [SerializeField] protected float roundTime;
+        [SerializeField] protected float roundEndTime;
         [SerializeField] protected bool roundRespawnEnabled;
         [SerializeField] protected ushort maxTeams;
         [SerializeField] protected ushort maxPlayersPerTeam;
 
+        public float RoundEndTime => roundEndTime;
         public bool RoundRespawnEnabled => roundRespawnEnabled;
-
         public ref GameRound[] GetRounds() => ref rounds; 
         
         private bool _ended;
@@ -31,6 +32,8 @@ namespace Game
         {
             return _ended;
         }
+
+        public abstract GameTeam GetWinner();
 
         private void LoadSettings()
         {
