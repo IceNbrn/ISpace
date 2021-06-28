@@ -8,7 +8,7 @@ namespace Game
     public abstract class GameMode : ScriptableObject
     {
         [SerializeField] protected GameRound[] rounds;
-        [SerializeField] protected float roundTime;
+        [SerializeField] protected int roundTime;
         [SerializeField] protected float roundEndTime;
         [SerializeField] protected bool roundRespawnEnabled;
         [SerializeField] protected ushort maxTeams;

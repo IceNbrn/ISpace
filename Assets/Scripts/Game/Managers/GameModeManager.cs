@@ -44,8 +44,15 @@ namespace Game.Managers
                 RpcRespawnPlayers();
                 GameRound indexRound = gameRounds[i];
                 Debug.Log($"GameRound Started: {indexRound.Index}");
+
+                for (int time = indexRound.Time; time >= 0; time--)
+                {
+                    Debug.Log($"RoundTimeLeft: {time}");
+                    if(RoundUIManager.Singleton != null)
+                        RoundUIManager.Singleton.SetTxtTimer(time);
+                    yield return new WaitForSeconds(1);
+                }
                 
-                yield return new WaitForSeconds(indexRound.Time);
                 //OnGameRoundEnd.Invoke(indexRound);
                 
                 RpcRoundEnded();
@@ -73,8 +80,11 @@ namespace Game.Managers
         [ClientRpc]
         private void RpcRoundEnded()
         {
-            RoundUIManager.Instance.SetWinnerText(gameMode.GetWinner().GetPlayers(), gameMode.GetWinner().GetScore());
-            Debug.Log($"RPC GameRound Ended | Winner: {gameMode.GetWinner().ToString()}");
+            GameTeam winner = gameMode.GetWinner();
+            if (winner == null)
+                return;
+            RoundUIManager.Singleton.SetWinnerText(winner.GetPlayers(), winner.GetScore());
+            Debug.Log($"RPC GameRound Ended | Winner: {winner.ToString()}");
         }
         
         

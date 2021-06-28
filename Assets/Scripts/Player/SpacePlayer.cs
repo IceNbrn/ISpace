@@ -67,6 +67,7 @@ namespace Player
         [SerializeField] private GameObject playerUI;
         [SerializeField] private GameObject deathScreenUI;
         [SerializeField] private GameObject scoreboardUI;
+        [SerializeField] private GameObject roundUI;
         private DeathUIManager _deathUIManager;
         
         // ---------------- Visuals ---------------- 
@@ -317,6 +318,7 @@ namespace Player
         {
             playerCanvas.SetActive(active);
             playerUI.SetActive(active);
+            roundUI.SetActive(active);
             //scoreboardUI.SetActive(value);
         }
 

@@ -28,8 +28,11 @@ namespace Game.GameModes
             
             ScoreRowData scoreRowStats = bestScore.Value.Value.GetStats();
             Stats stats = new Stats(scoreRowStats.PlayerKills, scoreRowStats.PlayerAssists,scoreRowStats.PlayerKills,scoreRowStats.PlayerPoints);
-            NetworkIdentity bestPlayer = NetworkIdentity.spawned[bestScore.Value.Key];
 
+            uint pNetId = bestScore.Value.Key;
+            if (!NetworkIdentity.spawned.ContainsKey(pNetId)) 
+                return null;
+            NetworkIdentity bestPlayer = NetworkIdentity.spawned[pNetId];
             Dictionary<NetworkIdentity, Stats> playerScore = new Dictionary<NetworkIdentity, Stats>(){ {bestPlayer, stats } };
             GameTeam gameTeam = new GameTeam(playerScore);
             return gameTeam;
