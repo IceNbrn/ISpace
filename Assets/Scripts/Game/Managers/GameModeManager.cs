@@ -83,7 +83,8 @@ namespace Game.Managers
             GameTeam winner = gameMode.GetWinner();
             if (winner == null)
                 return;
-            RoundUIManager.Singleton.SetWinnerText(winner.GetPlayers(), winner.GetScore());
+            string textWinner = gameMode.TotalRounds == 1 ? "wins the game" : "wins the round";
+            RoundUIManager.Singleton.SetWinnerText($"{winner.GetPlayers()} {textWinner}", winner.GetScore());
             Debug.Log($"RPC GameRound Ended | Winner: {winner.ToString()}");
         }
         

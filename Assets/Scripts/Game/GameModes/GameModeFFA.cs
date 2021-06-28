@@ -32,6 +32,7 @@ namespace Game.GameModes
             uint pNetId = bestScore.Value.Key;
             if (!NetworkIdentity.spawned.ContainsKey(pNetId)) 
                 return null;
+            
             NetworkIdentity bestPlayer = NetworkIdentity.spawned[pNetId];
             Dictionary<NetworkIdentity, Stats> playerScore = new Dictionary<NetworkIdentity, Stats>(){ {bestPlayer, stats } };
             GameTeam gameTeam = new GameTeam(playerScore);

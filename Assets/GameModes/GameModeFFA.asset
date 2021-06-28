@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 313c66fb11624f14b207196b7bda6e47, type: 3}
   m_Name: GameModeFFA
   m_EditorClassIdentifier: 
-  rounds: []
+  totalRounds: 1
   roundTime: 300
   roundEndTime: 2
   roundRespawnEnabled: 1
