@@ -35,7 +35,7 @@ namespace Game.GameModes
             
             NetworkIdentity bestPlayer = NetworkIdentity.spawned[pNetId];
             Dictionary<NetworkIdentity, Stats> playerScore = new Dictionary<NetworkIdentity, Stats>(){ {bestPlayer, stats } };
-            GameTeam gameTeam = new GameTeam(playerScore);
+            GameTeam gameTeam = new GameTeam(playerScore, 1);
             return gameTeam;
 
         }

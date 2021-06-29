@@ -88,9 +88,9 @@ public class GameManager : MonoBehaviour
 
     public void SetSensitivity(float value)
     {
-        value *= 0.1f;
         PlayerSettings.Sensitivity = value;
         PlayerMovementController.SetSensitivity(value);
+        PlayerSettings.OnSettingsUpdated.Invoke();
     }
 
     //public ref PlayerSettings PlayerSettings => ref PlayerSettings;

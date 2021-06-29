@@ -14,6 +14,7 @@ namespace Game.Managers
         [SerializeField] protected float matchLoadTime;
 
         public static bool RespawnEnabled;
+        public static Action<int> OnGameRoundStarted;
         public static Action<GameRound> OnGameRoundEnd;
         
         private string _gameModeName;
@@ -44,12 +45,11 @@ namespace Game.Managers
                 RpcRespawnPlayers();
                 GameRound indexRound = gameRounds[i];
                 Debug.Log($"GameRound Started: {indexRound.Index}");
-
+                
                 for (int time = indexRound.Time; time >= 0; time--)
                 {
                     Debug.Log($"RoundTimeLeft: {time}");
-                    if(RoundUIManager.Singleton != null)
-                        RoundUIManager.Singleton.SetTxtTimer(time);
+                    RpcStartTimer(time);
                     yield return new WaitForSeconds(1);
                 }
                 
@@ -61,6 +61,53 @@ namespace Game.Managers
             yield return new WaitForSeconds(matchLoadTime);
             GameMatchEnd();
             yield return null;
+        }
+
+        [ClientRpc]
+        private void RpcStartTimer(int time)
+        {
+            if(RoundUIManager.Singleton != null)
+                RoundUIManager.Singleton.SetTxtTimer(time);
+        } 
+
+        [Server]
+        private void AssignPlayersToTeams()
+        {
+            GameTeam[] gameTeams = gameMode.GetTeams();
+            int gameTeamsSize = gameTeams.Length;
+            if (gameTeamsSize < 2) return;
+
+            int playersCount = NetworkIdentity.spawned.Count;
+            int minTotalPlayers = 0;
+            
+            for (int i = 0; i < gameTeamsSize; i++)
+                minTotalPlayers += gameTeams[i].MinSize;
+
+            if (playersCount >= minTotalPlayers)
+            {
+                if (gameTeamsSize == 2)
+                {
+                    GameTeam biggerTeam = GetBiggerTeam();
+                    GameTeam smallestTeam = GetSmallestTeam();
+
+                    int playerPerTeam = biggerTeam.MaxSize / smallestTeam.MaxSize;
+                    
+                    for (int i = 0; i < playersCount; i++)
+                    {
+                        var playersIdentities = NetworkIdentity.spawned.Values;
+                        NetworkIdentity player = playersIdentities.ElementAt(0);
+                        
+                        if (biggerTeam.Size <= playerPerTeam)
+                            smallestTeam.AddPlayer(player);
+                    }
+
+                }
+                
+            }
+            else
+            {
+                // Not enough players to play 
+            }
         }
 
         [ClientRpc]
@@ -87,7 +134,18 @@ namespace Game.Managers
             RoundUIManager.Singleton.SetWinnerText($"{winner.GetPlayers()} {textWinner}", winner.GetScore());
             Debug.Log($"RPC GameRound Ended | Winner: {winner.ToString()}");
         }
+
+        private GameTeam GetBiggerTeam()
+        {
+            var teams = gameMode.GetTeams().OrderByDescending(team => team.MaxSize);
+            return teams.ElementAt(0);
+        }
         
+        private GameTeam GetSmallestTeam()
+        {
+            var teams = gameMode.GetTeams().OrderBy(team => team.MaxSize);
+            return teams.ElementAt(0);
+        }
         
     }
 }

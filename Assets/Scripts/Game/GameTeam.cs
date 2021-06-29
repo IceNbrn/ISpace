@@ -9,14 +9,23 @@ namespace Game
     public class GameTeam
     {
         public Dictionary<NetworkIdentity, Stats> PlayersScores { get; private set; }
+        public int Size { get; private set; }
+        public int MinSize { get; private set; }
         public int MaxSize { get; private set; }
         
         public GameTeam () {}
 
-        public GameTeam(Dictionary<NetworkIdentity, Stats> playersScores)
+        public GameTeam(int minSize, int maxSize)
+        {
+            MinSize = minSize;
+            MaxSize = maxSize;
+        }
+        
+        public GameTeam(Dictionary<NetworkIdentity, Stats> playersScores, int maxSize)
         {
             PlayersScores = playersScores;
-            MaxSize = playersScores.Count;
+            Size = playersScores.Count;
+            MaxSize = maxSize;
         }
 
         public override string ToString()
@@ -52,6 +61,13 @@ namespace Game
         public int GetScore()
         {
             return PlayersScores.Count == 1 ? PlayersScores.Values.ElementAt(0).Kills : 0;
+        }
+
+        public void AddPlayer(NetworkIdentity playerIdentity)
+        {
+            PlayersScores ??= new Dictionary<NetworkIdentity, Stats>();
+            
+            PlayersScores.Add(playerIdentity, null);
         }
     }
 }

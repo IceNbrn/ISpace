@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Game.Managers;
 using TMPro;
 using UnityEngine;
 using Utils;
@@ -20,8 +21,25 @@ namespace UI
         {
             if (!InitializeSingleton()) 
                 return;
+
+            GameModeManager.OnGameRoundStarted += OnGameRoundStarted;
         }
-        
+
+        public void OnGameRoundStarted(int time)
+        {
+            StartCoroutine(StartTimerCoroutine(time));
+        }
+
+        private IEnumerator StartTimerCoroutine(int roundTime)
+        {
+            for (int time = roundTime; time >= 0; time--)
+            {
+                Debug.Log($"RoundTimeLeft: {time}");
+                SetTxtTimer(time);
+                yield return new WaitForSeconds(1);
+            }
+        }
+
         private bool InitializeSingleton()
         {
             if (Singleton != null && Singleton == this) 

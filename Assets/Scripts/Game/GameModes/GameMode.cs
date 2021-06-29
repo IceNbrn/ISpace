@@ -12,14 +12,16 @@ namespace Game
         [SerializeField] protected int roundTime;
         [SerializeField] protected float roundEndTime;
         [SerializeField] protected bool roundRespawnEnabled;
-        [SerializeField] protected ushort maxTeams;
+        [SerializeField] protected ushort totalTeams;
         [SerializeField] protected ushort maxPlayersPerTeam;
         protected GameRound[] _rounds;
+        protected GameTeam[] _teams;
         
         public int TotalRounds => totalRounds;
         public float RoundEndTime => roundEndTime;
         public bool RoundRespawnEnabled => roundRespawnEnabled;
         public ref GameRound[] GetRounds() => ref _rounds; 
+        public ref GameTeam[] GetTeams() => ref _teams; 
         
         private bool _ended;
 
