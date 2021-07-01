@@ -555,14 +555,6 @@
                     "expectedControlType": "Quaternion",
                     "processors": "",
                     "interactions": ""
-                },
-                {
-                    "name": "DevConsole",
-                    "type": "Button",
-                    "id": "f04e17ae-e7e6-44be-b298-04b33a1786a9",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -983,15 +975,69 @@
                     "action": "TrackedDeviceOrientation",
                     "isComposite": false,
                     "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "DevConsole",
+            "id": "9cb3e0f6-7c19-464f-913d-4af8c937d811",
+            "actions": [
+                {
+                    "name": "Interaction",
+                    "type": "Button",
+                    "id": "d5f1c13a-e175-4a4b-b172-7f392731d3c8",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 },
                 {
+                    "name": "HistoryUp",
+                    "type": "Button",
+                    "id": "9422c4bf-5527-4972-8076-b88dbf71c926",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "HistoryDown",
+                    "type": "Button",
+                    "id": "85028c6e-87fa-4bf2-9092-0a32313f9ebf",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
                     "name": "",
-                    "id": "d89f1b67-28a4-40f9-9d75-3e930d5530cf",
+                    "id": "cbd5df0b-3fdd-4669-babf-afa684a8fa9c",
                     "path": "<Keyboard>/f1",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "DevConsole",
+                    "action": "Interaction",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4ae19cf2-66c1-4493-b4ab-2476c19f13a6",
+                    "path": "<Keyboard>/upArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "HistoryUp",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "141f7066-fee0-4729-921b-8845a97b4635",
+                    "path": "<Keyboard>/downArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "HistoryDown",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -93,6 +93,10 @@ public class GameManager : MonoBehaviour
         PlayerSettings.OnSettingsUpdated.Invoke();
     }
 
+    public float GetCameraSensitivity() => PlayerSettings.Sensitivity;
+
+    public PlayerSettings GetPlayerSettings() => PlayerSettings;
+
     //public ref PlayerSettings PlayerSettings => ref PlayerSettings;
 
     public void UpdateCrosshair(CrosshairSettings crosshairSettings)

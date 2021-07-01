@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Player;
 using TMPro;
+using UI;
 using UI.ScoreBoard;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -18,10 +20,11 @@ namespace DevConsole
         private PlayerInActions _controls;
         
         // UI
-        [SerializeField]
-        private GameObject _canvas;
-        [SerializeField]
-        private TMP_InputField input;
+        [SerializeField] private GameObject _canvas;
+        [SerializeField] private GameObject commandRowPrefab;
+        [SerializeField] private TMP_InputField input;
+        [SerializeField] private ScrollViewContent scrollViewContent;
+        
         private bool _isConsoleActive;
         
         // Commands
@@ -35,7 +38,12 @@ namespace DevConsole
         public static ConsoleCommand<float> CMD_CROSSHAIR_GAP;
         public static ConsoleCommand<int> CMD_CROSSHAIR_TYPE;
         public static ConsoleCommand<string> CMD_CROSSHAIR_COLOR;
+        public static ConsoleCommand CMD_CLEAR;
         public static ConsoleCommand CMD_QUIT;
+
+        [SerializeField] private int maxInputsHistory = 20;
+        private Queue<string> _inputsHistory;
+        private int _inputIndex;
         
         private void Awake()
         {
@@ -43,8 +51,14 @@ namespace DevConsole
                 return;
             
             _controls = PlayerInputs.PlayerControls;
-            _controls.UI.DevConsole.Enable();
-            _controls.UI.DevConsole.performed += context => ToggleConsole();
+            PlayerInActions.DevConsoleActions devConsoleActions = _controls.DevConsole;
+            devConsoleActions.Enable();
+            devConsoleActions.Interaction.performed += ToggleConsole;
+            devConsoleActions.HistoryUp.performed += HistoryUpOnperformed;
+            devConsoleActions.HistoryDown.performed += HistoryDownOnperformed;
+            
+            
+            _inputsHistory = new Queue<string>(maxInputsHistory); 
             
             InitializeCommands();
         }
@@ -81,7 +95,10 @@ namespace DevConsole
             
             CMD_PLAYER_SENSITIVITY = new ConsoleCommand<float>("sensitivity", "Sets the player mouse sensitivity", "sensitivity <value>",(value) =>
             {
-                _gameManager.SetSensitivity(value);
+                if (value > 0.0f)
+                    _gameManager.SetSensitivity(value);
+                else
+                    ShowCommandOutput(CMD_PLAYER_SENSITIVITY.CommandId, _gameManager.GetCameraSensitivity().ToString(), CMD_PLAYER_SENSITIVITY.CommandDescription);
             });
             
             CMD_ADD_SCORE_ROW = new ConsoleCommand("addScoreRow", "adds score row", "addScoreRow",() =>
@@ -91,8 +108,15 @@ namespace DevConsole
             
             CMD_CROSSHAIR_THICKNESS = new ConsoleCommand<float>("crosshair_thickness", "Sets the player crosshair thickness", "crosshair_thickness <value>",(value) =>
             {
-                CrosshairSettings crosshairSettings = new CrosshairSettings() {Thickness = value};
-                _gameManager.UpdateCrosshair(crosshairSettings);
+                if (value > 0.0f)
+                {
+                    CrosshairSettings crosshairSettings = new CrosshairSettings() {Thickness = value};
+                    _gameManager.UpdateCrosshair(crosshairSettings);
+                }
+                else
+                {
+                    ShowCommandOutput(CMD_CROSSHAIR_THICKNESS.CommandId, _gameManager.PlayerSettings.CrosshairSettings.Thickness.ToString(), CMD_CROSSHAIR_THICKNESS.CommandDescription);
+                }
             });
             
             CMD_CROSSHAIR_GAP = new ConsoleCommand<float>("crosshair_gap", "Sets the player crosshair gap", "crosshair_gap <value>",(value) =>
@@ -126,6 +150,11 @@ namespace DevConsole
                 _gameManager.UpdateCrosshair(crosshairSettings);
             });
             
+            CMD_CLEAR = new ConsoleCommand("clear", "Clears the console", "clear",() =>
+            {
+                scrollViewContent.DeleteAllContent();
+            });
+            
             CMD_QUIT = new ConsoleCommand("quit", "Quits game", "quit",() =>
             {
 #if UNITY_EDITOR
@@ -145,6 +174,7 @@ namespace DevConsole
                 CMD_CROSSHAIR_GAP,
                 CMD_CROSSHAIR_TYPE,
                 CMD_CROSSHAIR_COLOR,
+                CMD_CLEAR,
                 CMD_QUIT
             };
         }
@@ -152,9 +182,17 @@ namespace DevConsole
         public void HandleInput()
         {
             string inputText = input.text.ToLower();
+            
+            // Add the input to the input history
+            /*if (_inputsHistory.Count >= maxInputsHistory)
+                _inputsHistory.Dequeue();*/
+            
+            if(!inputText.Equals(string.Empty))
+                _inputsHistory.Enqueue(inputText);
+
             Debug.Log($"Input text: {inputText}");
             string[] args = inputText.Split(' ');
-
+            
             for (int i = 0; i < _commands.Count; ++i)
             {
                 object command = _commands[i];
@@ -172,6 +210,7 @@ namespace DevConsole
             ConsoleCommandBase commandBase = command as ConsoleCommandBase;
             if (commandBase != null && inputText.Contains(commandBase.CommandId.ToLower()))
             {
+                
                 switch (command)
                 {
                     case ConsoleCommand consoleCommand:
@@ -179,7 +218,7 @@ namespace DevConsole
                         consoleCommand?.Invoke();
                         return true;
                     }
-                    case ConsoleCommand<int> consoleCommand:
+                    case ConsoleCommand<int> consoleCommand when IsValidCommand(ref args):
                     {
                         int value = int.Parse(args[1]);
                         consoleCommand?.Invoke(value);
@@ -187,13 +226,18 @@ namespace DevConsole
                     }
                     case ConsoleCommand<float> consoleCommand:
                     {
-                        string args1 = args[1];
-                        args1 = args1.Replace(".", ",");
-                        float value = float.Parse(args1);
+                        float value = 0.0f;
+                        if (IsValidCommand(ref args))
+                        {
+                            string args1 = args[1];
+                            args1 = args1.Replace(".", ",");
+                            value = float.Parse(args1);
+                        }
+                        
                         consoleCommand?.Invoke(value);
                         return true;
                     }
-                    case ConsoleCommand<string> consoleCommand:
+                    case ConsoleCommand<string> consoleCommand when IsValidCommand(ref args):
                     {
                         string value = args[1];
                         consoleCommand?.Invoke(value);
@@ -204,7 +248,29 @@ namespace DevConsole
             return false;
         }
 
-        private void ToggleConsole()
+        private bool IsValidCommand(ref string[] args)
+        {
+            bool argsValid = false;
+            if (args.Length > 1)
+            {
+                for (int i = 0; i < args.Length; i++)
+                {
+                    argsValid = args[i] != null || args[i] != string.Empty;
+                    if (!argsValid)
+                        return false;
+                }
+            }
+            return argsValid;
+        }
+
+        private void ShowCommandOutput(string title, string value, string description)
+        {
+            GameObject instantiatedCommand = scrollViewContent.AddContent(commandRowPrefab);
+            CommandOutput command = instantiatedCommand.GetComponent<CommandOutput>();
+            command.SetTexts(title, value, description);
+        }
+
+        private void ToggleConsole(InputAction.CallbackContext obj)
         {
             _isConsoleActive = !_isConsoleActive;
             LockPlayer(_isConsoleActive);
@@ -216,6 +282,21 @@ namespace DevConsole
                 input.ActivateInputField();
             }
             
+        }
+        
+        private void HistoryUpOnperformed(InputAction.CallbackContext obj)
+        {
+            string inputHistory = _inputsHistory.ElementAt((_inputsHistory.Count - 1) - _inputIndex);
+            input.text = inputHistory;
+            if (_inputIndex + 1 < _inputsHistory.Count)
+                _inputIndex++;
+        }
+        
+        private void HistoryDownOnperformed(InputAction.CallbackContext obj)
+        {
+            if (_inputIndex - 1 >= 0)
+                _inputIndex--;
+            input.text = _inputsHistory.ElementAt(_inputIndex);
         }
 
         private void LockPlayer(bool value)

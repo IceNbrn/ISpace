@@ -9,7 +9,7 @@ namespace Game
     {
         
         [SerializeField] protected int totalRounds = 1;
-        [SerializeField] protected int roundTime;
+        [SerializeField] protected ushort roundTime = 300;
         [SerializeField] protected float roundEndTime;
         [SerializeField] protected bool roundRespawnEnabled;
         [SerializeField] protected ushort totalTeams;

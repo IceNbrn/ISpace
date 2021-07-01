@@ -37,7 +37,6 @@ namespace UI
 
         public GameObject AddContent(GameObject prefab)
         {
-            
             GameObject instantiatedObject = Instantiate(prefab, spawnPosition.transform.parent, false);
             RectTransform rectTransform = instantiatedObject.GetComponent<RectTransform>();
             RectTransform spawnRectTransform = spawnPosition.GetComponent<RectTransform>();
@@ -51,6 +50,13 @@ namespace UI
             listPrefabs.Add(instantiatedObject);
             
             return instantiatedObject;
+        }
+
+        public void DeleteAllContent()
+        {
+            foreach (GameObject prefab in listPrefabs)
+                Destroy(prefab);
+            listPrefabs.Clear();
         }
     }
 }

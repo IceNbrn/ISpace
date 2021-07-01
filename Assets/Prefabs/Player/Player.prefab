@@ -14595,6 +14595,30 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8758998336197172765}
     m_Modifications:
+    - target: {fileID: 446966066647726635, guid: 60e7d7f11b3b0b046b055bcf800074ff, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 812842830802471667, guid: 60e7d7f11b3b0b046b055bcf800074ff, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 812842830802471667, guid: 60e7d7f11b3b0b046b055bcf800074ff, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 812842830802471667, guid: 60e7d7f11b3b0b046b055bcf800074ff, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0.051062107
+      objectReference: {fileID: 0}
+    - target: {fileID: 8105771402509660477, guid: 60e7d7f11b3b0b046b055bcf800074ff, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8105771402509660477, guid: 60e7d7f11b3b0b046b055bcf800074ff, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: -0.16020012
+      objectReference: {fileID: 0}
     - target: {fileID: 8178192897437621024, guid: 60e7d7f11b3b0b046b055bcf800074ff, type: 3}
       propertyPath: m_Name
       value: ScoreBoardHUD
@@ -14602,6 +14626,18 @@ PrefabInstance:
     - target: {fileID: 8178192897437621024, guid: 60e7d7f11b3b0b046b055bcf800074ff, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8738795238889473966, guid: 60e7d7f11b3b0b046b055bcf800074ff, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8738795238889473966, guid: 60e7d7f11b3b0b046b055bcf800074ff, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8738795238889473966, guid: 60e7d7f11b3b0b046b055bcf800074ff, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: -0.16020012
       objectReference: {fileID: 0}
     - target: {fileID: 9043027088365901050, guid: 60e7d7f11b3b0b046b055bcf800074ff, type: 3}
       propertyPath: m_Pivot.x

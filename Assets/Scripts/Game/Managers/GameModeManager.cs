@@ -46,12 +46,13 @@ namespace Game.Managers
                 GameRound indexRound = gameRounds[i];
                 Debug.Log($"GameRound Started: {indexRound.Index}");
                 
-                for (int time = indexRound.Time; time >= 0; time--)
+                for (ushort time = indexRound.Time; time > 0; time--)
                 {
                     Debug.Log($"RoundTimeLeft: {time}");
-                    RpcStartTimer(time);
+                    RpcShowTimer(time);
                     yield return new WaitForSeconds(1);
                 }
+                RpcShowTimer(0);
                 
                 //OnGameRoundEnd.Invoke(indexRound);
                 
@@ -64,11 +65,7 @@ namespace Game.Managers
         }
 
         [ClientRpc]
-        private void RpcStartTimer(int time)
-        {
-            if(RoundUIManager.Singleton != null)
-                RoundUIManager.Singleton.SetTxtTimer(time);
-        } 
+        private void RpcShowTimer(ushort time) => RoundUIManager.Singleton?.SetTxtTimer(time);
 
         [Server]
         private void AssignPlayersToTeams()
