@@ -186,9 +186,10 @@ namespace DevConsole
             // Add the input to the input history
             /*if (_inputsHistory.Count >= maxInputsHistory)
                 _inputsHistory.Dequeue();*/
+
+            if (inputText.Equals(string.Empty)) return;
             
-            if(!inputText.Equals(string.Empty))
-                _inputsHistory.Enqueue(inputText);
+            _inputsHistory.Enqueue(inputText);
 
             Debug.Log($"Input text: {inputText}");
             string[] args = inputText.Split(' ');
@@ -286,22 +287,20 @@ namespace DevConsole
         
         private void HistoryUpOnperformed(InputAction.CallbackContext obj)
         {
-            string inputHistory = _inputsHistory.ElementAt((_inputsHistory.Count - 1) - _inputIndex);
+            string inputHistory = _inputsHistory.Dequeue();
             input.text = inputHistory;
-            if (_inputIndex + 1 < _inputsHistory.Count)
-                _inputIndex++;
+            _inputsHistory.Enqueue(inputHistory);
         }
         
         private void HistoryDownOnperformed(InputAction.CallbackContext obj)
         {
-            if (_inputIndex - 1 >= 0)
-                _inputIndex--;
-            input.text = _inputsHistory.ElementAt(_inputIndex);
+            string inputHistory = _inputsHistory.Dequeue();
+            input.text = inputHistory;
+            _inputsHistory.Enqueue(inputHistory);
         }
 
         private void LockPlayer(bool value)
         {
-            
             if (value)
             {
                 Cursor.visible = true;

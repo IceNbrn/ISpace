@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GameModeFFA
   m_EditorClassIdentifier: 
   totalRounds: 1
-  roundTime: 10
+  roundTime: 300
   roundEndTime: 2
   roundRespawnEnabled: 1
   totalTeams: 0

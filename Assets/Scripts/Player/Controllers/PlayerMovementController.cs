@@ -183,6 +183,6 @@ namespace Player
             _rigidbody.AddForce(-forceVector, ForceMode.Force);
         }
         
-        public static void SetSensitivity(float value) => _mouseSensitivity = value;
+        public static void SetSensitivity(float value) => _mouseSensitivity = value * 0.1f;
     }
 }

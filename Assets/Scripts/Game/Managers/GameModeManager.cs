@@ -4,6 +4,7 @@ using System.Linq;
 using Mirror;
 using Player;
 using UI;
+using UI.ScoreBoard;
 using UnityEngine;
 
 namespace Game.Managers
@@ -32,7 +33,7 @@ namespace Game.Managers
         
         private void GameMatchEnd()
         {
-            if(isServer)
+            if (isServer)
                 StartCoroutine(StartGameMode());
         }
 
