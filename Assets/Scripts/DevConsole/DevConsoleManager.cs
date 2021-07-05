@@ -38,6 +38,7 @@ namespace DevConsole
         public static ConsoleCommand<float> CMD_CROSSHAIR_GAP;
         public static ConsoleCommand<int> CMD_CROSSHAIR_TYPE;
         public static ConsoleCommand<string> CMD_CROSSHAIR_COLOR;
+        public static ConsoleCommand<int> CMD_FPS_MAX;
         public static ConsoleCommand CMD_CLEAR;
         public static ConsoleCommand CMD_QUIT;
 
@@ -52,7 +53,7 @@ namespace DevConsole
             
             _controls = PlayerInputs.PlayerControls;
             PlayerInActions.DevConsoleActions devConsoleActions = _controls.DevConsole;
-            devConsoleActions.Enable();
+            
             devConsoleActions.Interaction.performed += ToggleConsole;
             devConsoleActions.HistoryUp.performed += HistoryUpOnperformed;
             devConsoleActions.HistoryDown.performed += HistoryDownOnperformed;
@@ -66,6 +67,17 @@ namespace DevConsole
         private void Start()
         {
             _gameManager = GameManager.Singleton;
+        }
+
+        private void OnEnable()
+        {
+            _controls = PlayerInputs.PlayerControls;
+            _controls.DevConsole.Enable();
+        }
+
+        private void OnDisable()
+        {
+            _controls.DevConsole.Disable();
         }
 
         private bool InitializeSingleton()
@@ -149,6 +161,12 @@ namespace DevConsole
                 CrosshairSettings crosshairSettings = new CrosshairSettings() {Color = color};
                 _gameManager.UpdateCrosshair(crosshairSettings);
             });
+
+            CMD_FPS_MAX = new ConsoleCommand<int>("fps_max", "Sets the maximum fps", "fps_max <value>", (value) =>
+            {
+                if (value > 0)
+                    Application.targetFrameRate = value;
+            });
             
             CMD_CLEAR = new ConsoleCommand("clear", "Clears the console", "clear",() =>
             {
@@ -174,6 +192,7 @@ namespace DevConsole
                 CMD_CROSSHAIR_GAP,
                 CMD_CROSSHAIR_TYPE,
                 CMD_CROSSHAIR_COLOR,
+                CMD_FPS_MAX,
                 CMD_CLEAR,
                 CMD_QUIT
             };
@@ -287,6 +306,8 @@ namespace DevConsole
         
         private void HistoryUpOnperformed(InputAction.CallbackContext obj)
         {
+            if (_inputsHistory.Count == 0)
+                return;
             string inputHistory = _inputsHistory.Dequeue();
             input.text = inputHistory;
             _inputsHistory.Enqueue(inputHistory);
@@ -294,6 +315,8 @@ namespace DevConsole
         
         private void HistoryDownOnperformed(InputAction.CallbackContext obj)
         {
+            if (_inputsHistory.Count == 0)
+                return;
             string inputHistory = _inputsHistory.Dequeue();
             input.text = inputHistory;
             _inputsHistory.Enqueue(inputHistory);

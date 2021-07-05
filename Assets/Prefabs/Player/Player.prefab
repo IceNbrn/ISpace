@@ -13226,7 +13226,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   _moveSpeed: 8
-  _rollSpeed: 40
+  _rollSpeed: 80
   _heightSpeed: 8
   _dragColliding: 10000
   dragLerpTime: 0.8
