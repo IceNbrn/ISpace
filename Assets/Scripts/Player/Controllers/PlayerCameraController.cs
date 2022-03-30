@@ -26,7 +26,7 @@ namespace Player
         private void Awake()
         {
             LocalPlayerAnnouncer.OnLocalPlayerUpdated += OnLocalPlayerUpdated;
-            SpacePlayer.OnPlayerStatusUpdated += OnPlayerStatusUpdated;
+            
         }
 
         private void OnPlayerStatusUpdated(EPlayerStatus status)
@@ -53,7 +53,7 @@ namespace Player
         private void OnLocalPlayerUpdated(NetworkIdentity obj)
         {
             _localPlayer = obj;
-
+            SpacePlayer.OnPlayerStatusUpdated += OnPlayerStatusUpdated;
             InitializeCamera();
         }
 

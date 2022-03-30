@@ -8,16 +8,16 @@ namespace Player
     {
         // Speeds
         [Header("Speeds Settings")]
-        [SerializeField] private float _moveSpeed      = 15f;
-        [SerializeField] private float _rollSpeed      = 40f;
+        [SerializeField] private float _moveSpeed      = 8f;
+        [SerializeField] private float _rollSpeed      = 80f;
         [SerializeField] private float _heightSpeed    = 8f;
         //[SerializeField] private float _drag           = 2f;
-        [SerializeField] private float _dragColliding  = 100f;
+        [SerializeField] private float _dragColliding  = 10000f;
+        [SerializeField] private float dragLerpTime = 0.8f;
+        [SerializeField] private Vector3 mapCenter;
+        [SerializeField] private float maxDistance = 5000.0f;
         
         private static float _mouseSensitivity;
-        
-        // UI
-        [SerializeField] private GameObject _canvasUI;
         
         private float _rotationX, _rotationY, _rotationZ;
         
@@ -29,13 +29,12 @@ namespace Player
 
         private void Start()
         {
+            _rigidbody = GetComponent<Rigidbody>();
+            
             if (!isLocalPlayer)
                 return;
-
-            _mouseSensitivity = GameManager.Singleton.GetPlayerSettings().Sensitivity * 0.1f;
             
-            _canvasUI.SetActive(true);
-            _rigidbody = GetComponent<Rigidbody>();
+            _mouseSensitivity = GameManager.Singleton.PlayerSettings.Sensitivity * 0.1f;
         }
         
         private void OnEnable()
@@ -64,7 +63,6 @@ namespace Player
             Rotate();
             Move();
             ControlHeight();
-            //ControlVelocity();
         }
 
         
@@ -73,6 +71,7 @@ namespace Player
             if (!isLocalPlayer)
                 return;
             
+            CmdLimitArea();
             ControlVelocity();
         }
 
@@ -89,7 +88,6 @@ namespace Player
             _rotationY += movementInput.x;
             _rotationZ += rollInput;
             
-            
             // Roll
             transform.Rotate(0f, 0f, _rotationZ, Space.Self);
  
@@ -99,17 +97,7 @@ namespace Player
             // Yaw
             transform.Rotate(0f, _rotationY, 0f, Space.Self);
             
-            
-            /*
-            Vector3 roll = new Vector3(0.0f, 0.0f, _rotationZ);
-            _rigidbody.rotation *= Quaternion.Euler(roll.x, roll.y, roll.z);
-            
-            Vector3 pitch = new Vector3(_rotationX, 0.0f, 0.0f);
-            _rigidbody.rotation *= Quaternion.Euler(pitch.x, pitch.y, pitch.z);
-            
-            Vector3 yaw = new Vector3(0.0f, _rotationY, 0.0f);
-            _rigidbody.rotation *= Quaternion.Euler(yaw.x, yaw.y, yaw.z);*/
-            
+            // Reset the rotations, so it stops rotating
             _rotationX = 0f;
             _rotationY = 0f;
             _rotationZ = 0f;
@@ -117,6 +105,7 @@ namespace Player
 
         private void Move()
         {
+            // Gets the input from the player with the new input system
             Vector2 movementInput = _controls.Player.Move.ReadValue<Vector2>();
             _move += transform.right * movementInput.x + transform.forward * movementInput.y;
             _move *= _moveSpeed * Time.fixedDeltaTime;
@@ -135,10 +124,6 @@ namespace Player
         private void ControlVelocity()
         {
             _rigidbody.velocity += _move;
-            /*
-            _rigidbody.velocity += _move;
-            _rigidbody.velocity = Vector3.ClampMagnitude(_rigidbody.velocity, _moveSpeed);*/
-            //_rigidbody.velocity *= Mathf.Exp(-Time.deltaTime * _drag);
         }
 
         private void OnCollisionEnter(Collision other)
@@ -146,17 +131,39 @@ namespace Player
             if (!isLocalPlayer)
                 return;
             _rigidbody.angularDrag = _dragColliding;
-            //_rigidbody.freezeRotation = true;
         }
 
         private void OnCollisionExit(Collision other)
         {
             if (!isLocalPlayer)
                 return;
-            _rigidbody.angularDrag = 1f;
-            //_rigidbody.freezeRotation = false;
+            
+            _rigidbody.angularVelocity -= Vector3.Lerp(_rigidbody.angularVelocity, Vector3.zero, dragLerpTime);
         }
 
-        public static void SetSensitivity(float value) => _mouseSensitivity = value;
+        [Command]
+        private void CmdLimitArea()
+        {
+            Debug.Log($"LimitArea - Object: {gameObject.name}");
+            Vector3 playerPosition = transform.position;
+            Vector3 distanceToCenter = playerPosition - mapCenter;
+            if (distanceToCenter.sqrMagnitude > maxDistance)
+            {
+                Vector3 forceVector = distanceToCenter * (distanceToCenter.sqrMagnitude / 1000.0f);
+                Debug.Log($"CMD Negative ForceVector {-forceVector}");
+                RpcLimitArea(forceVector);
+            }
+        }
+        
+        [ClientRpc]
+        private void RpcLimitArea(Vector3 forceVector)
+        {
+            if (!isLocalPlayer)
+                return;
+            Debug.Log($"RPC Negative ForceVector {-forceVector}");
+            _rigidbody.AddForce(-forceVector, ForceMode.Force);
+        }
+        
+        public static void SetSensitivity(float value) => _mouseSensitivity = value * 0.1f;
     }
 }

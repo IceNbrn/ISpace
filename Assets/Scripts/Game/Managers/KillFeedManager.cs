@@ -3,6 +3,7 @@ using System.Collections;
 using Mirror;
 using Player;
 using TMPro;
+using UI.ScoreBoard;
 using UnityEngine;
 
 namespace Game.Managers
@@ -22,9 +23,18 @@ namespace Game.Managers
         
         private void Awake()
         {
+            //SpacePlayer.OnPlayerKills += OnPlayerKills;
+            //if (!isLocalPlayer) return;
             SpacePlayer.OnPlayerDies += OnPlayerDies;
         }
-
+        
+        private void OnPlayerKills(DeathInfo deadInfo)
+        {
+            if (!isLocalPlayer) return;
+            
+            _deadInfo = deadInfo;
+            CmdShowKillFeed();
+        }
         
         private void OnPlayerDies(DeathInfo deadInfo)
         {
@@ -43,10 +53,22 @@ namespace Game.Managers
         [ClientRpc]
         private void RpcShowKillFeed()
         {
+            /*
             if (_isKillFeedActive)
+            {
                 _currentText = killFeedText.text;
+                _currentWeaponText = killFeedWeaponText.text;
+            }
             else
+            {
                 StartCoroutine(ShowKillFeedCoroutine());
+            }*/
+            if (_isKillFeedActive)
+            {
+                _currentText = killFeedText.text;
+                _currentWeaponText = killFeedWeaponText.text;
+            }
+            StartCoroutine(ShowKillFeedCoroutine());
         }
         
         private IEnumerator ShowKillFeedCoroutine()
@@ -62,9 +84,10 @@ namespace Game.Managers
             }
             
             yield return new WaitForSeconds(killFeedTime);
-            killFeed.SetActive(false);
+            
             _isKillFeedActive = false;
             _deadInfo = null;
+            killFeed.SetActive(false);
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Mirror;
 using Player;
@@ -27,6 +28,9 @@ namespace Weapons
         private Camera fpsCamera;
         private Rigidbody _playerRigidbody;
     
+        // Events
+        public Action OnWeaponFire;
+        
         // Effects
         [SerializeField]
         private ParticleSystem muzzleFlash1, muzzleFlash2;
@@ -100,6 +104,17 @@ namespace Weapons
             {
                 CoolOffWeapon();
             }
+        }
+        
+        public void SetWeaponActive(bool active)
+        {
+            if (!isLocalPlayer)
+                return;
+            PlayerInActions.PlayerActions playerActions = PlayerInputs.PlayerControls.Player;
+            if (active)
+                playerActions.Fire.Enable();
+            else
+                playerActions.Fire.Disable();
         }
 
         private void CooloffAction(InputAction.CallbackContext obj)
@@ -183,12 +198,7 @@ namespace Weapons
             SpacePlayer player = GameManager.GetPlayer(playerId);
             if (damage >= 0.0f && damage <= weaponInfo.Damage)
             {
-                player.TakeDamage(damage, fromPlayer, weaponInfo.name);
-                /*
-                if (!hasAuthority && !isServer)
-                    player.TakeDamage(damage, fromPlayer);
-                else
-                    player.RpcTakeDamage(damage, fromPlayer);*/
+                bool isPlayerDead = player.TakeDamage(damage, fromPlayer, weaponInfo.name);
             }
         }
 
