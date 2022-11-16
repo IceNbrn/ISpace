@@ -1,4 +1,4 @@
 # ISpace
  Multiplayer game made for TMW
 
-If you want you can view more about this project on my portfolio: https://brunoacastanheira.pt/projects/ispace.html
+To know more about this project visit my portfolio: https://brunoacastanheira.pt/projects/ispace.html
